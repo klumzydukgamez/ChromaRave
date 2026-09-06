@@ -1,0 +1,6 @@
+[submodule "Vendor/SDL"]
+	path = Vendor/SDL
+	url = https://github.com/libsdl-org/SDL.git
+[submodule "Vendor/cglm"]
+	path = Vendor/cglm
+	url = https://github.com/recp/cglm.git

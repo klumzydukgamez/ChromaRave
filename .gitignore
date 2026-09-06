@@ -1,0 +1,7 @@
+Vendor/SDL
+Vendor/cglm
+
+Build
+*.exe
+
+.cache
