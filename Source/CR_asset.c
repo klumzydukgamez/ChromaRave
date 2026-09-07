@@ -9,3 +9,9 @@ static const char asset_finalFrag[] = {
 
 const char* const CR_asset_finalVert = asset_finalVert;
 const char* const CR_asset_finalFrag = asset_finalFrag;
+
+static const Uint8 asset_defaultPng[] = {
+#embed "CR_default.png"
+};
+const Uint8* const CR_asset_defaultPng = asset_defaultPng;
+const size_t CR_asset_defaultPng_size = sizeof(asset_defaultPng);

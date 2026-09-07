@@ -15,7 +15,14 @@ constexpr float CR_ASPECT = (float)CR_WIDTH / (float)CR_HEIGHT;
 extern const char* const CR_asset_finalVert;
 extern const char* const CR_asset_finalFrag;
 
+extern const Uint8* const CR_asset_defaultPng;
+extern const size_t CR_asset_defaultPng_size;
+
 GLuint CR_compile_shader(const char* const vertSource, const char* const fragSource);
+
+SDL_Surface* CR_load_surface(const Uint8* data, size_t size);
+GLuint CR_create_texture(int width, int height, bool wrap, const void* pixels);
+void CR_update_texture(GLuint texture, const SDL_Surface* surface, int x, int y);
 
 typedef struct {
 	SDL_Window* window;

@@ -57,18 +57,13 @@ bool CR_AppState_init(CR_AppState* state) {
 		return false;
 	}
 
-	glGenTextures(1, &state->finalTexture);
-	glBindTexture(GL_TEXTURE_2D, state->finalTexture);
-	glTexImage2D(
-		GL_TEXTURE_2D, 0, GL_RGB8,
-		CR_WIDTH, CR_HEIGHT, 0,
-		GL_RGBA, GL_UNSIGNED_BYTE, nullptr
-	);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	state->finalTexture = CR_create_texture(CR_WIDTH, CR_HEIGHT, false, nullptr);
+	if (!state->finalTexture) {
+		CR_PANIC("CR_create_texture failed.");
+		return false;
+	}
+	SDL_Surface* defaultSurface = CR_load_surface(CR_asset_defaultPng, CR_asset_defaultPng_size);
+	CR_update_texture(state->finalTexture, defaultSurface, 50, 50);
 
 	glUseProgram(state->finalShader);
 	glUniform1i(state->finalUniformTexture, 0);
