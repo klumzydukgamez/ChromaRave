@@ -9,7 +9,7 @@ SDL_AppResult SDL_AppInit(void** appState, int argc, char** argv) {
 		CR_PANIC("SDL_malloc failed. %s", SDL_GetError());
 		return SDL_APP_FAILURE;
 	}
-	if (!CR_AppState_init((CR_AppState*)appState)) {
+	if (!CR_AppState_init((CR_AppState*)*appState)) {
 		CR_PANIC("CR_AppState_init failed.");
 		return SDL_APP_FAILURE;
 	}
@@ -22,6 +22,7 @@ void SDL_AppQuit(void* appState, SDL_AppResult result) {
 		return;
 	}
 	CR_AppState_quit((CR_AppState*)appState);
+	SDL_free(appState);
 }
 
 SDL_AppResult SDL_AppEvent(void* appState, SDL_Event* event) {

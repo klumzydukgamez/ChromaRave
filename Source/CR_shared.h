@@ -8,9 +8,27 @@
 #define CR_PANIC(format, ...) \
 	SDL_Log("[PANIC][%s][%d] " format, __FILE_NAME__, __LINE__, ##__VA_ARGS__)
 
+constexpr int CR_WIDTH = 640;
+constexpr int CR_HEIGHT = 360;
+constexpr float CR_ASPECT = (float)CR_WIDTH / (float)CR_HEIGHT;
+
+extern const char* const CR_asset_finalVert;
+extern const char* const CR_asset_finalFrag;
+
+GLuint CR_compile_shader(const char* const vertSource, const char* const fragSource);
+
 typedef struct {
 	SDL_Window* window;
 	SDL_GLContext glContext;
+
+	SDL_Rect viewport;
+
+	GLuint dummyVertexArray;
+
+	GLuint finalShader;
+	GLint finalUniformTexture;
+	GLuint finalTexture;
+	GLuint finalFramebuffer;
 } CR_AppState;
 
 bool CR_AppState_init(CR_AppState* state);
