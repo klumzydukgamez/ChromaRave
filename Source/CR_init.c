@@ -47,9 +47,6 @@ bool CR_AppState_init(CR_AppState* state) {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glm_vec2_zero(state->cameraPosition);
-	glm_mat4_identity(state->cameraProjView);
-
 	glGenVertexArrays(1, &state->dummyVertexArray);
 
 	state->masterTexture = CR_create_texture(CR_MASTER_TEX_WIDTH, CR_MASTER_TEX_HEIGHT, false, nullptr);
@@ -69,6 +66,15 @@ bool CR_AppState_init(CR_AppState* state) {
 		CR_PANIC("CR_AppState_pack_surface failed.");
 		return false;
 	}
+
+	glm_vec2_zero(state->cameraPosition);
+	glm_vec2_zero(state->cameraTargetPosition);
+	state->cameraZoom = 1.0f;
+	state->cameraTargetZoom = 1.0f;
+	SDL_srand(0);
+	SDL_memset(&state->cameraShakes, 0, sizeof(state->cameraShakes));
+	state->cameraShakeCount = 0;
+	glm_mat4_identity(state->cameraProjView);
 
 	state->sceneShader = CR_compile_shader(CR_asset_sceneVert, CR_asset_sceneFrag);
 	if (!state->sceneShader) {

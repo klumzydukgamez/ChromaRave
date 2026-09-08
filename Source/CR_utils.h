@@ -9,6 +9,8 @@
 #define CR_WARN(format, ...) \
 	SDL_Log("[WARN][%s][%d] " format, __FILE_NAME__, __LINE__, ##__VA_ARGS__)
 
+float CR_random_shake_intensity();
+
 GLuint CR_compile_shader(const char* const vertSource, const char* const fragSource);
 
 SDL_Surface* CR_load_surface(const Uint8* data, size_t size);

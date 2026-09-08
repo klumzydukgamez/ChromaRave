@@ -10,6 +10,12 @@ constexpr float CR_ASPECT = (float)CR_WIDTH / (float)CR_HEIGHT;
 constexpr int CR_MASTER_TEX_WIDTH = 1024;
 constexpr int CR_MASTER_TEX_HEIGHT = 1024;
 
+constexpr float CR_CAMERA_MOVE_SPEED = 0.08f;
+constexpr float CR_CAMERA_ZOOM_SPEED = 0.08f;
+constexpr int CR_MAX_CAMERA_SHAKES = 16;
+constexpr float CR_MIN_CAMERA_SHAKE_INTENSITY = 0.05f;
+constexpr float CR_MIN_CAMERA_SHAKE_DIRECTION = 0.01f;
+
 constexpr int CR_MAX_SPRITES = 1024;
 constexpr int CR_MAX_VERTICES = CR_MAX_SPRITES * 4;
 constexpr int CR_MAX_INDICES = CR_MAX_SPRITES * 6;

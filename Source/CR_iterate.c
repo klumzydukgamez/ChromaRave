@@ -10,15 +10,9 @@ bool CR_AppState_iterate(CR_AppState* state) {
 
 	CR_AppState_push_sprite(
 		state, &state->defaultSprite,
-		(vec3){100.0f, 100.0f, 0.0f},
+		(vec3){0.0f, 0.0f, 0.0f},
 		(vec2){96.0f, 96.0f},
 		(vec4){1.0f, 0.0f, 0.0f, fabs(sin(SDL_GetTicks() * 0.01))}
-	);
-	CR_AppState_push_sprite(
-		state, &state->defaultSprite,
-		(vec3){200.0f, 200.0f, 0.0f},
-		(vec2){96.0f, 96.0f},
-		(vec4){1.0f, 0.0f, 0.0f, 0.0f}
 	);
 
 	CR_AppState_flush_vertices(state);

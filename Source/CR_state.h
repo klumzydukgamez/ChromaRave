@@ -10,9 +10,6 @@ typedef struct {
 
 	SDL_Rect viewport;
 
-	vec2 cameraPosition;
-	mat4 cameraProjView;
-
 	GLuint dummyVertexArray;
 
 	GLuint masterTexture;
@@ -21,6 +18,20 @@ typedef struct {
 	int masterOffset;
 
 	SDL_FRect defaultSprite;
+
+	vec2 cameraPosition;
+	vec2 cameraTargetPosition;
+	float cameraZoom;
+	float cameraTargetZoom;
+	struct {
+		vec2 origin;
+		vec2 direction;
+		float radius;
+		float intensity;
+		float decay;
+	} cameraShakes[CR_MAX_CAMERA_SHAKES];
+	int cameraShakeCount;
+	mat4 cameraProjView;
 
 	GLuint sceneShader;
 	GLint sceneUniformProjView;
@@ -43,6 +54,7 @@ typedef struct {
 	GLuint finalFramebuffer;
 } CR_AppState;
 
+void CR_AppState_shake_camera(CR_AppState* state, vec2 origin, vec2 direction, float radius, float intensity, float decay);
 void CR_AppState_update_camera(CR_AppState* state);
 
 bool CR_AppState_pack_surface(CR_AppState* state, SDL_Surface* surface, SDL_FRect* sprite, bool cleanup);

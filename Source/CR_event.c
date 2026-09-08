@@ -24,6 +24,17 @@ bool CR_AppState_event(CR_AppState* state, SDL_Event* event) {
 				state->viewport.y = (h - state->viewport.h) / 2;
 			}
 			break;
+		case SDL_EVENT_KEY_DOWN:
+			if (event->key.scancode == SDL_SCANCODE_D)
+				state->cameraTargetZoom += 0.1;
+			if (event->key.scancode == SDL_SCANCODE_A)
+				state->cameraTargetZoom -= 0.1;
+			if (event->key.scancode == SDL_SCANCODE_SPACE)
+				CR_AppState_shake_camera(
+					state, state->cameraPosition,
+					(vec3){0.0f, 1.0f, 0.0f},
+					10.0f, 100.0f, 0.75f
+				);
 		default:
 			break;
 	}
