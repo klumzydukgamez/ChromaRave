@@ -25,16 +25,24 @@ bool CR_AppState_event(CR_AppState* state, SDL_Event* event) {
 			}
 			break;
 		case SDL_EVENT_KEY_DOWN:
-			if (event->key.scancode == SDL_SCANCODE_D)
-				state->cameraTargetZoom += 0.1;
-			if (event->key.scancode == SDL_SCANCODE_A)
-				state->cameraTargetZoom -= 0.1;
-			if (event->key.scancode == SDL_SCANCODE_SPACE)
-				CR_AppState_shake_camera(
-					state, state->cameraPosition,
-					(vec3){0.0f, 1.0f, 0.0f},
-					10.0f, 100.0f, 0.75f
-				);
+			if (!event->key.repeat && event->key.scancode < CR_MAX_KEYBOARD_KEYS) {
+				state->keyboardKeys[event->key.scancode] = true;
+				state->keyboardKeyTimestamps[event->key.scancode] = SDL_GetTicks();
+			}
+			break;
+		case SDL_EVENT_KEY_UP:
+			if (event->key.scancode < CR_MAX_KEYBOARD_KEYS)
+				state->keyboardKeys[event->key.scancode] = false;
+		case SDL_EVENT_MOUSE_BUTTON_DOWN:
+			if (event->button.button < CR_MAX_MOUSE_BUTTONS) {
+				state->mouseButtons[event->button.button] = true;
+				state->mouseButtonTimestamps[event->button.button] = SDL_GetTicks();
+			}
+			break;
+		case SDL_EVENT_MOUSE_BUTTON_UP:
+			if (event->button.button < CR_MAX_MOUSE_BUTTONS)
+				state->mouseButtons[event->button.button] = true;
+			break;
 		default:
 			break;
 	}

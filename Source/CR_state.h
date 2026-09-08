@@ -10,6 +10,14 @@ typedef struct {
 
 	SDL_Rect viewport;
 
+	bool keyboardKeys[CR_MAX_KEYBOARD_KEYS];
+	bool keyboardPreviousKeys[CR_MAX_KEYBOARD_KEYS];
+	Uint64 keyboardKeyTimestamps[CR_MAX_KEYBOARD_KEYS];
+
+	bool mouseButtons[CR_MAX_MOUSE_BUTTONS];
+	bool mousePreviousButtons[CR_MAX_MOUSE_BUTTONS];
+	Uint64 mouseButtonTimestamps[CR_MAX_MOUSE_BUTTONS];
+
 	GLuint dummyVertexArray;
 
 	GLuint masterTexture;
@@ -53,6 +61,18 @@ typedef struct {
 	GLuint finalTexture;
 	GLuint finalFramebuffer;
 } CR_AppState;
+
+void CR_AppState_update_input(CR_AppState* state);
+bool CR_AppState_keyboard_down(CR_AppState* state, SDL_Scancode key);
+bool CR_AppState_keyboard_up(CR_AppState* state, SDL_Scancode key);
+bool CR_AppState_keyboard_pressed(CR_AppState* state, SDL_Scancode key);
+bool CR_AppState_keyboard_released(CR_AppState* state, SDL_Scancode key);
+bool CR_AppState_keyboard_held(CR_AppState* state, SDL_Scancode key, Uint64 time);
+bool CR_AppState_mouse_down(CR_AppState* state, int button);
+bool CR_AppState_mouse_up(CR_AppState* state, int button);
+bool CR_AppState_mouse_pressed(CR_AppState* state, int button);
+bool CR_AppState_mouse_released(CR_AppState* state, int button);
+bool CR_AppState_mouse_held(CR_AppState* state, int button, Uint64 time);
 
 void CR_AppState_shake_camera(CR_AppState* state, vec2 origin, vec2 direction, float radius, float intensity, float decay);
 void CR_AppState_update_camera(CR_AppState* state);

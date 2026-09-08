@@ -47,6 +47,11 @@ bool CR_AppState_init(CR_AppState* state) {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	SDL_memset(&state->keyboardKeys, 0, sizeof(state->keyboardKeys));
+	SDL_memset(&state->keyboardPreviousKeys, 0, sizeof(state->keyboardPreviousKeys));
+	SDL_memset(&state->mouseButtons, 0, sizeof(state->mouseButtons));
+	SDL_memset(&state->mousePreviousButtons, 0, sizeof(state->mousePreviousButtons));
+
 	glGenVertexArrays(1, &state->dummyVertexArray);
 
 	state->masterTexture = CR_create_texture(CR_MASTER_TEX_WIDTH, CR_MASTER_TEX_HEIGHT, false, nullptr);

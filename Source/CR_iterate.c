@@ -1,20 +1,22 @@
 #include "CR_shared.h"
 
 bool CR_AppState_iterate(CR_AppState* state) {
+	float alpha = fabs(sin(SDL_GetTicks() * 0.01));
+	if (CR_AppState_keyboard_held(state, SDL_SCANCODE_F, CR_KEYBOARD_KEY_HOLD_TIME))
+		alpha = 0.0f;
+	CR_AppState_push_sprite(
+		state, &state->defaultSprite,
+		(vec3){0.0f, 0.0f, 0.0f},
+		(vec2){96.0f, 96.0f},
+		(vec4){1.0f, 0.0f, 0.0f, alpha}
+	);
+
 	CR_AppState_update_camera(state);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, state->finalFramebuffer);
 	glViewport(0, 0, CR_WIDTH, CR_HEIGHT);
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	CR_AppState_push_sprite(
-		state, &state->defaultSprite,
-		(vec3){0.0f, 0.0f, 0.0f},
-		(vec2){96.0f, 96.0f},
-		(vec4){1.0f, 0.0f, 0.0f, fabs(sin(SDL_GetTicks() * 0.01))}
-	);
-
 	CR_AppState_flush_vertices(state);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -39,6 +41,8 @@ bool CR_AppState_iterate(CR_AppState* state) {
 		CR_PANIC("SDL_GL_SwapWindow failed. %s", SDL_GetError());
 		return false;
 	}
+
+	CR_AppState_update_input(state);
 
 	return true;
 }

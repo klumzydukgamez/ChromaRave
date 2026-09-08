@@ -7,6 +7,11 @@ constexpr int CR_WIDTH = 640;
 constexpr int CR_HEIGHT = 360;
 constexpr float CR_ASPECT = (float)CR_WIDTH / (float)CR_HEIGHT;
 
+constexpr int CR_MAX_KEYBOARD_KEYS = SDL_SCANCODE_COUNT;
+constexpr Uint64 CR_KEYBOARD_KEY_HOLD_TIME = 250;
+constexpr int CR_MAX_MOUSE_BUTTONS = 9;
+constexpr Uint64 CR_MOUSE_BUTTON_HOLD_TIME = 250;
+
 constexpr int CR_MASTER_TEX_WIDTH = 1024;
 constexpr int CR_MASTER_TEX_HEIGHT = 1024;
 
