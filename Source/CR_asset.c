@@ -1,5 +1,15 @@
 #include "CR_shared.h"
 
+static const char asset_sceneVert[] = {
+#embed "CR_scene.vert" suffix(, 0)
+};
+static const char asset_sceneFrag[] = {
+#embed "CR_scene.frag" suffix(, 0)
+};
+
+const char* const CR_asset_sceneVert = asset_sceneVert;
+const char* const CR_asset_sceneFrag = asset_sceneFrag;
+
 static const char asset_finalVert[] = {
 #embed "CR_final.vert" suffix(, 0)
 };

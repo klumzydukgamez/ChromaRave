@@ -25,7 +25,7 @@ GLuint CR_create_texture(int width, int height, bool wrap, const void* pixels) {
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexImage2D(
-		GL_TEXTURE_2D, 0, GL_RGB8,
+		GL_TEXTURE_2D, 0, GL_RGBA8,
 		width, height, 0,
 		GL_RGBA, GL_UNSIGNED_BYTE, pixels
 	);
@@ -38,15 +38,62 @@ GLuint CR_create_texture(int width, int height, bool wrap, const void* pixels) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	}
-	glBindTexture(GL_TEXTURE_2D, 0);
 	return texture;
 }
 
 void CR_update_texture(GLuint texture, const SDL_Surface* surface, int x, int y) {
+	if (!surface) {
+		CR_PANIC("Null Surface.");
+		return;
+	}
+
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexSubImage2D(
 		GL_TEXTURE_2D, 0, x, y, surface->w, surface->h,
 		GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels
 	);
-	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+bool CR_AppState_pack_surface(CR_AppState* state, SDL_Surface* surface, SDL_FRect* sprite, bool cleanup) {
+	if (!surface) {
+		CR_PANIC("Null Surface.");
+		return false;
+	}
+
+	if (surface->w > CR_MASTER_TEX_WIDTH || surface->h > CR_MASTER_TEX_HEIGHT) {
+		CR_PANIC("Surface Too Large.");
+		if (cleanup)
+			SDL_DestroySurface(surface);
+		return false;
+	}
+
+	if (state->masterX + surface->w > CR_MASTER_TEX_WIDTH) {
+		state->masterY += state->masterOffset;
+		state->masterX = 0;
+		state->masterOffset = 0;
+	}
+	if (state->masterY + surface->h > CR_MASTER_TEX_HEIGHT) {
+		CR_PANIC("Master Full.");
+		if (cleanup)
+			SDL_DestroySurface(surface);
+		return false;
+	}
+
+	CR_update_texture(state->masterTexture, surface, state->masterX, state->masterY);
+
+	if (sprite) {
+		sprite->x = (float)state->masterX / (float)CR_MASTER_TEX_WIDTH;
+		sprite->y = (float)state->masterY / (float)CR_MASTER_TEX_HEIGHT;
+		sprite->w = (float)surface->w / (float)CR_MASTER_TEX_WIDTH;
+		sprite->h = (float)surface->h / (float)CR_MASTER_TEX_HEIGHT;
+	}
+
+	state->masterX += surface->w;
+	if (surface->h > state->masterOffset)
+		state->masterOffset = surface->h;
+
+	if (cleanup)
+		SDL_DestroySurface(surface);
+
+	return true;
 }
