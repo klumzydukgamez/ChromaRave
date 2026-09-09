@@ -3,7 +3,9 @@
 
 #include "CR_common.h"
 #include "CR_constants.h"
+#include "CR_enums.h"
 #include "CR_asset.h"
+#include "CR_animation.h"
 #include "CR_utils.h"
 #include "CR_state.h"
 

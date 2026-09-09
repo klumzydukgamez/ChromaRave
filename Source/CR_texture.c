@@ -20,7 +20,7 @@ SDL_Surface* CR_load_surface(const Uint8* data, size_t size) {
 	return converted;
 }
 
-GLuint CR_create_texture(int width, int height, bool wrap, const void* pixels) {
+GLuint CR_create_texture(int width, int height, bool wrap, bool linear, const void* pixels) {
 	GLuint texture = 0;
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -29,8 +29,13 @@ GLuint CR_create_texture(int width, int height, bool wrap, const void* pixels) {
 		width, height, 0,
 		GL_RGBA, GL_UNSIGNED_BYTE, pixels
 	);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	if (linear) {
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	} else {
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	}
 	if (wrap) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -60,37 +65,38 @@ bool CR_AppState_pack_surface(CR_AppState* state, SDL_Surface* surface, SDL_FRec
 		return false;
 	}
 
-	if (surface->w > CR_MASTER_TEX_WIDTH || surface->h > CR_MASTER_TEX_HEIGHT) {
+	if (surface->w + (CR_MASTER_TEX_PADDING * 2) > CR_MASTER_TEX_WIDTH || surface->h + (CR_MASTER_TEX_PADDING * 2) > CR_MASTER_TEX_HEIGHT) {
 		CR_PANIC("Surface Too Large.");
 		if (cleanup)
 			SDL_DestroySurface(surface);
 		return false;
 	}
 
-	if (state->masterX + surface->w > CR_MASTER_TEX_WIDTH) {
+	if (state->masterX + surface->w + (CR_MASTER_TEX_PADDING * 2) > CR_MASTER_TEX_WIDTH) {
 		state->masterY += state->masterOffset;
 		state->masterX = 0;
 		state->masterOffset = 0;
 	}
-	if (state->masterY + surface->h > CR_MASTER_TEX_HEIGHT) {
+	if (state->masterY + surface->h + (CR_MASTER_TEX_PADDING * 2) > CR_MASTER_TEX_HEIGHT) {
 		CR_PANIC("Master Full.");
 		if (cleanup)
 			SDL_DestroySurface(surface);
 		return false;
 	}
 
-	CR_update_texture(state->masterTexture, surface, state->masterX, state->masterY);
+	CR_update_texture(state->masterTexture, surface, state->masterX + CR_MASTER_TEX_PADDING, state->masterY + CR_MASTER_TEX_PADDING);
 
 	if (sprite) {
-		sprite->x = (float)state->masterX / (float)CR_MASTER_TEX_WIDTH;
-		sprite->y = (float)state->masterY / (float)CR_MASTER_TEX_HEIGHT;
+		sprite->x = (float)(state->masterX + CR_MASTER_TEX_PADDING) / (float)CR_MASTER_TEX_WIDTH;
+
+		sprite->y = (float)(state->masterY + CR_MASTER_TEX_PADDING) / (float)CR_MASTER_TEX_HEIGHT;
 		sprite->w = (float)surface->w / (float)CR_MASTER_TEX_WIDTH;
 		sprite->h = (float)surface->h / (float)CR_MASTER_TEX_HEIGHT;
 	}
 
-	state->masterX += surface->w;
-	if (surface->h > state->masterOffset)
-		state->masterOffset = surface->h;
+	state->masterX += surface->w + (CR_MASTER_TEX_PADDING * 2);
+	if (surface->h + (CR_MASTER_TEX_PADDING * 2) > state->masterOffset)
+		state->masterOffset = surface->h + (CR_MASTER_TEX_PADDING * 2);
 
 	if (cleanup)
 		SDL_DestroySurface(surface);

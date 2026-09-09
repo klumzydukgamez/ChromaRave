@@ -1,16 +1,7 @@
 #include "CR_shared.h"
 
 bool CR_AppState_iterate(CR_AppState* state) {
-	float alpha = fabs(sin(SDL_GetTicks() * 0.01));
-	if (CR_AppState_keyboard_held(state, SDL_SCANCODE_F, CR_KEYBOARD_KEY_HOLD_TIME))
-		alpha = 0.0f;
-	CR_AppState_push_sprite(
-		state, &state->defaultSprite,
-		(vec3){0.0f, 0.0f, 0.0f},
-		(vec2){96.0f, 96.0f},
-		(vec4){1.0f, 0.0f, 0.0f, alpha}
-	);
-
+	CR_AppState_update_player(state);
 	CR_AppState_update_camera(state);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, state->finalFramebuffer);

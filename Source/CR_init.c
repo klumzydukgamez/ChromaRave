@@ -44,6 +44,9 @@ bool CR_AppState_init(CR_AppState* state) {
 		return false;
 	}
 
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -54,34 +57,39 @@ bool CR_AppState_init(CR_AppState* state) {
 
 	glGenVertexArrays(1, &state->dummyVertexArray);
 
-	state->masterTexture = CR_create_texture(CR_MASTER_TEX_WIDTH, CR_MASTER_TEX_HEIGHT, false, nullptr);
-	if (!state->masterTexture) {
+	state->finalShader = CR_compile_shader(CR_asset_final_vert, CR_asset_final_frag);
+	if (!state->finalShader) {
+		CR_PANIC("CR_compile_shader failed.");
+		return false;
+	}
+	state->finalUniformTexture = glGetUniformLocation(state->finalShader, "uTexture");
+	if (state->finalUniformTexture == -1) {
+		CR_PANIC("[uTexture] glGetUniformLocation failed.");
+		return false;
+	}
+	state->finalTexture = CR_create_texture(CR_WIDTH, CR_HEIGHT, false, false, nullptr);
+	if (!state->finalTexture) {
 		CR_PANIC("CR_create_texture failed.");
 		return false;
 	}
-	state->masterX = 0;
-	state->masterY = 0;
-	state->masterOffset = 0;
-
-	if (!CR_AppState_pack_surface(
-			state,
-			CR_load_surface(CR_asset_defaultPng, CR_asset_defaultPng_size),
-			&state->defaultSprite, true
-		)) {
-		CR_PANIC("CR_AppState_pack_surface failed.");
+	glUseProgram(state->finalShader);
+	glUniform1i(state->finalUniformTexture, 0);
+	glGenFramebuffers(1, &state->finalFramebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, state->finalFramebuffer);
+	glFramebufferTexture2D(
+		GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+		GL_TEXTURE_2D, state->finalTexture, 0
+	);
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		CR_PANIC("glFramebufferTexture2D failed.");
 		return false;
 	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	glm_vec2_zero(state->cameraPosition);
-	glm_vec2_zero(state->cameraTargetPosition);
-	state->cameraZoom = 1.0f;
-	state->cameraTargetZoom = 1.0f;
-	SDL_srand(0);
-	SDL_memset(&state->cameraShakes, 0, sizeof(state->cameraShakes));
-	state->cameraShakeCount = 0;
-	glm_mat4_identity(state->cameraProjView);
+	SDL_memset(&state->vertices, 0, sizeof(state->vertices));
+	state->vertexCount = 0;
 
-	state->sceneShader = CR_compile_shader(CR_asset_sceneVert, CR_asset_sceneFrag);
+	state->sceneShader = CR_compile_shader(CR_asset_scene_vert, CR_asset_scene_frag);
 	if (!state->sceneShader) {
 		CR_PANIC("CR_compile_shader failed.");
 		return false;
@@ -98,10 +106,6 @@ bool CR_AppState_init(CR_AppState* state) {
 	}
 	glUseProgram(state->sceneShader);
 	glUniform1i(state->sceneUniformTexture, 0);
-
-	SDL_memset(&state->vertices, 0, sizeof(state->vertices));
-	state->vertexCount = 0;
-
 	glGenVertexArrays(1, &state->sceneVertexArray);
 	glGenBuffers(1, &state->sceneVertexBuffer);
 	glGenBuffers(1, &state->sceneElementBuffer);
@@ -144,36 +148,57 @@ bool CR_AppState_init(CR_AppState* state) {
 	);
 	glBindVertexArray(0);
 
-	state->finalShader = CR_compile_shader(CR_asset_finalVert, CR_asset_finalFrag);
-	if (!state->finalShader) {
-		CR_PANIC("CR_compile_shader failed.");
-		return false;
-	}
-	state->finalUniformTexture = glGetUniformLocation(state->finalShader, "uTexture");
-	if (state->finalUniformTexture == -1) {
-		CR_PANIC("[uTexture] glGetUniformLocation failed.");
-		return false;
-	}
+	glm_vec2_zero(state->cameraPosition);
+	glm_vec2_zero(state->cameraTargetPosition);
+	state->cameraZoom = 1.0f;
+	state->cameraTargetZoom = 1.0f;
+	SDL_srand(0);
+	SDL_memset(&state->cameraShakes, 0, sizeof(state->cameraShakes));
+	state->cameraShakeCount = 0;
+	glm_mat4_identity(state->cameraProjView);
 
-	state->finalTexture = CR_create_texture(CR_WIDTH, CR_HEIGHT, false, nullptr);
-	if (!state->finalTexture) {
+	state->masterTexture = CR_create_texture(CR_MASTER_TEX_WIDTH, CR_MASTER_TEX_HEIGHT, false, false, nullptr);
+	if (!state->masterTexture) {
 		CR_PANIC("CR_create_texture failed.");
 		return false;
 	}
-	glUseProgram(state->finalShader);
-	glUniform1i(state->finalUniformTexture, 0);
+	state->masterX = 0;
+	state->masterY = 0;
+	state->masterOffset = 0;
 
-	glGenFramebuffers(1, &state->finalFramebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, state->finalFramebuffer);
-	glFramebufferTexture2D(
-		GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-		GL_TEXTURE_2D, state->finalTexture, 0
-	);
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-		CR_PANIC("glFramebufferTexture2D failed.");
+	if (!CR_AppState_pack_surface(
+			state,
+			CR_load_surface(CR_asset_default_png, CR_asset_default_png_size),
+			&state->defaultSprite, true
+		)) {
+		CR_PANIC("CR_AppState_pack_surface failed.");
 		return false;
 	}
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	if (!CR_AppState_pack_surface(
+			state,
+			CR_load_surface(CR_asset_player_idle_png, CR_asset_player_idle_png_size),
+			&state->playerSprites[CR_EPlayerAnim_IDLE], true
+		)) {
+		CR_PANIC("CR_AppState_pack_surface failed.");
+		return false;
+	}
+	if (!CR_AppState_pack_surface(
+			state,
+			CR_load_surface(CR_asset_player_run_png, CR_asset_player_run_png_size),
+			&state->playerSprites[CR_EPlayerAnim_RUN], true
+		)) {
+		CR_PANIC("CR_AppState_pack_surface failed.");
+		return false;
+	}
+
+	glm_vec2_zero(state->playerPosition);
+	glm_vec2_zero(state->playerVelocity);
+	state->playerAnimation = CR_EPlayerAnim_IDLE;
+	state->playerLastAnimation = CR_EPlayerAnim_IDLE;
+	state->playerFrameIndex = 0;
+	state->playerLastFrameTick = SDL_GetTicks();
+	state->playerPlaying = true;
 
 	return true;
 }

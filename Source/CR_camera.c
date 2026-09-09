@@ -52,7 +52,7 @@ void CR_AppState_update_camera(CR_AppState* state) {
 		}
 		state->cameraShakes[i].intensity *= state->cameraShakes[i].decay;
 		if (state->cameraShakes[i].intensity < CR_MIN_CAMERA_SHAKE_INTENSITY) {
-			state->cameraShakes[i] = state->cameraShakes[state->cameraShakeCount];
+			state->cameraShakes[i] = state->cameraShakes[state->cameraShakeCount - 1];
 			state->cameraShakeCount--;
 			i--;
 		}
@@ -61,7 +61,7 @@ void CR_AppState_update_camera(CR_AppState* state) {
 	mat4 projection;
 	glm_ortho(
 		0.0f, (float)CR_WIDTH, (float)CR_HEIGHT,
-		0.0f, -1.0f, 1.0f, projection
+		0.0f, CR_CAMERA_NEAR, CR_CAMERA_FAR, projection
 	);
 	mat4 view;
 	glm_mat4_identity(view);

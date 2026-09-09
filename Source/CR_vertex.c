@@ -13,14 +13,20 @@ void CR_AppState_push_vertex(CR_AppState* state, const vec3 position, const vec2
 	state->vertexCount++;
 }
 
-void CR_AppState_push_sprite(CR_AppState* state, const SDL_FRect* sprite, const vec3 position, const vec2 size, const vec4 color) {
+void CR_AppState_push_sprite(CR_AppState* state, const SDL_FRect* sprite, const vec3 position, const vec2 size, const vec4 color, bool flip) {
+	float uvLeft = sprite->x;
+	float uvRight = sprite->x + sprite->w;
+	if (flip) {
+		uvLeft = sprite->x + sprite->w;
+		uvRight = sprite->x;
+	}
 	CR_AppState_push_vertex(
 		state,
 		(vec3){
 			position[0], position[1], position[2]
 		},
 		(vec2){
-			sprite->x, sprite->y
+			uvLeft, sprite->y
 		},
 		color
 	);
@@ -30,7 +36,7 @@ void CR_AppState_push_sprite(CR_AppState* state, const SDL_FRect* sprite, const 
 			position[0] + size[0], position[1], position[2]
 		},
 		(vec2){
-			sprite->x + sprite->w, sprite->y
+			uvRight, sprite->y
 		},
 		color
 	);
@@ -40,7 +46,7 @@ void CR_AppState_push_sprite(CR_AppState* state, const SDL_FRect* sprite, const 
 			position[0] + size[0], position[1] + size[1], position[2]
 		},
 		(vec2){
-			sprite->x + sprite->w, sprite->y + sprite->h
+			uvRight, sprite->y + sprite->h
 		},
 		color
 	);
@@ -50,7 +56,59 @@ void CR_AppState_push_sprite(CR_AppState* state, const SDL_FRect* sprite, const 
 			position[0], position[1] + size[1], position[2]
 		},
 		(vec2){
-			sprite->x, sprite->y + sprite->h
+			uvLeft, sprite->y + sprite->h
+		},
+		color
+	);
+}
+
+void CR_AppState_push_animated_sprite(CR_AppState* state, const SDL_FRect* sprite, const vec3 position, const vec2 size, const vec4 color, bool flip, int length, int frame) {
+	float w = sprite->w / (float)length;
+	int wrapped = ((frame % length) + frame) % length;
+	float x = sprite->x + (wrapped * w);
+	float uvLeft = x;
+	float uvRight = x + w;
+	if (flip) {
+		uvLeft = x + w;
+		uvRight = x;
+	}
+	CR_AppState_push_vertex(
+		state,
+		(vec3){
+			position[0], position[1], position[2]
+		},
+		(vec2){
+			uvLeft, sprite->y
+		},
+		color
+	);
+	CR_AppState_push_vertex(
+		state,
+		(vec3){
+			position[0] + size[0], position[1], position[2]
+		},
+		(vec2){
+			uvRight, sprite->y
+		},
+		color
+	);
+	CR_AppState_push_vertex(
+		state,
+		(vec3){
+			position[0] + size[0], position[1] + size[1], position[2]
+		},
+		(vec2){
+			uvRight, sprite->y + sprite->h
+		},
+		color
+	);
+	CR_AppState_push_vertex(
+		state,
+		(vec3){
+			position[0], position[1] + size[1], position[2]
+		},
+		(vec2){
+			uvLeft, sprite->y + sprite->h
 		},
 		color
 	);
