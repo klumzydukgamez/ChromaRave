@@ -59,7 +59,7 @@ constexpr vec2 CR_BACKGROUND_FACTORS[CR_BACKGROUND_LAYER_COUNT] = {
 
 constexpr int CR_TILE_COLS = 512;
 constexpr int CR_TILE_ROWS = 256;
-constexpr int CR_TILE_MAX = 71;
+constexpr int CR_TILE_MAX = 126 + 1;
 constexpr int CR_TILE_WIDTH = 32;
 constexpr int CR_TILE_HEIGHT = 32;
 

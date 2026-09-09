@@ -412,6 +412,286 @@ static const Uint8 asset_tile_70_png[] = {
 };
 const Uint8* const CR_asset_tile_70_png = asset_tile_70_png;
 const size_t CR_asset_tile_70_png_size = sizeof(asset_tile_70_png);
+static const Uint8 asset_tile_71_png[] = {
+#embed "CR_tile_71.png"
+};
+const Uint8* const CR_asset_tile_71_png = asset_tile_71_png;
+const size_t CR_asset_tile_71_png_size = sizeof(asset_tile_71_png);
+static const Uint8 asset_tile_72_png[] = {
+#embed "CR_tile_72.png"
+};
+const Uint8* const CR_asset_tile_72_png = asset_tile_72_png;
+const size_t CR_asset_tile_72_png_size = sizeof(asset_tile_72_png);
+static const Uint8 asset_tile_73_png[] = {
+#embed "CR_tile_73.png"
+};
+const Uint8* const CR_asset_tile_73_png = asset_tile_73_png;
+const size_t CR_asset_tile_73_png_size = sizeof(asset_tile_73_png);
+static const Uint8 asset_tile_74_png[] = {
+#embed "CR_tile_74.png"
+};
+const Uint8* const CR_asset_tile_74_png = asset_tile_74_png;
+const size_t CR_asset_tile_74_png_size = sizeof(asset_tile_74_png);
+static const Uint8 asset_tile_75_png[] = {
+#embed "CR_tile_75.png"
+};
+const Uint8* const CR_asset_tile_75_png = asset_tile_75_png;
+const size_t CR_asset_tile_75_png_size = sizeof(asset_tile_75_png);
+static const Uint8 asset_tile_76_png[] = {
+#embed "CR_tile_76.png"
+};
+const Uint8* const CR_asset_tile_76_png = asset_tile_76_png;
+const size_t CR_asset_tile_76_png_size = sizeof(asset_tile_76_png);
+static const Uint8 asset_tile_77_png[] = {
+#embed "CR_tile_77.png"
+};
+const Uint8* const CR_asset_tile_77_png = asset_tile_77_png;
+const size_t CR_asset_tile_77_png_size = sizeof(asset_tile_77_png);
+static const Uint8 asset_tile_78_png[] = {
+#embed "CR_tile_78.png"
+};
+const Uint8* const CR_asset_tile_78_png = asset_tile_78_png;
+const size_t CR_asset_tile_78_png_size = sizeof(asset_tile_78_png);
+static const Uint8 asset_tile_79_png[] = {
+#embed "CR_tile_79.png"
+};
+const Uint8* const CR_asset_tile_79_png = asset_tile_79_png;
+const size_t CR_asset_tile_79_png_size = sizeof(asset_tile_79_png);
+static const Uint8 asset_tile_80_png[] = {
+#embed "CR_tile_80.png"
+};
+const Uint8* const CR_asset_tile_80_png = asset_tile_80_png;
+const size_t CR_asset_tile_80_png_size = sizeof(asset_tile_80_png);
+static const Uint8 asset_tile_81_png[] = {
+#embed "CR_tile_81.png"
+};
+const Uint8* const CR_asset_tile_81_png = asset_tile_81_png;
+const size_t CR_asset_tile_81_png_size = sizeof(asset_tile_81_png);
+static const Uint8 asset_tile_82_png[] = {
+#embed "CR_tile_82.png"
+};
+const Uint8* const CR_asset_tile_82_png = asset_tile_82_png;
+const size_t CR_asset_tile_82_png_size = sizeof(asset_tile_82_png);
+static const Uint8 asset_tile_83_png[] = {
+#embed "CR_tile_83.png"
+};
+const Uint8* const CR_asset_tile_83_png = asset_tile_83_png;
+const size_t CR_asset_tile_83_png_size = sizeof(asset_tile_83_png);
+static const Uint8 asset_tile_84_png[] = {
+#embed "CR_tile_84.png"
+};
+const Uint8* const CR_asset_tile_84_png = asset_tile_84_png;
+const size_t CR_asset_tile_84_png_size = sizeof(asset_tile_84_png);
+static const Uint8 asset_tile_85_png[] = {
+#embed "CR_tile_85.png"
+};
+const Uint8* const CR_asset_tile_85_png = asset_tile_85_png;
+const size_t CR_asset_tile_85_png_size = sizeof(asset_tile_85_png);
+static const Uint8 asset_tile_86_png[] = {
+#embed "CR_tile_86.png"
+};
+const Uint8* const CR_asset_tile_86_png = asset_tile_86_png;
+const size_t CR_asset_tile_86_png_size = sizeof(asset_tile_86_png);
+static const Uint8 asset_tile_87_png[] = {
+#embed "CR_tile_87.png"
+};
+const Uint8* const CR_asset_tile_87_png = asset_tile_87_png;
+const size_t CR_asset_tile_87_png_size = sizeof(asset_tile_87_png);
+static const Uint8 asset_tile_88_png[] = {
+#embed "CR_tile_88.png"
+};
+const Uint8* const CR_asset_tile_88_png = asset_tile_88_png;
+const size_t CR_asset_tile_88_png_size = sizeof(asset_tile_88_png);
+static const Uint8 asset_tile_89_png[] = {
+#embed "CR_tile_89.png"
+};
+const Uint8* const CR_asset_tile_89_png = asset_tile_89_png;
+const size_t CR_asset_tile_89_png_size = sizeof(asset_tile_89_png);
+static const Uint8 asset_tile_90_png[] = {
+#embed "CR_tile_90.png"
+};
+const Uint8* const CR_asset_tile_90_png = asset_tile_90_png;
+const size_t CR_asset_tile_90_png_size = sizeof(asset_tile_90_png);
+static const Uint8 asset_tile_91_png[] = {
+#embed "CR_tile_91.png"
+};
+const Uint8* const CR_asset_tile_91_png = asset_tile_91_png;
+const size_t CR_asset_tile_91_png_size = sizeof(asset_tile_91_png);
+static const Uint8 asset_tile_92_png[] = {
+#embed "CR_tile_92.png"
+};
+const Uint8* const CR_asset_tile_92_png = asset_tile_92_png;
+const size_t CR_asset_tile_92_png_size = sizeof(asset_tile_92_png);
+static const Uint8 asset_tile_93_png[] = {
+#embed "CR_tile_93.png"
+};
+const Uint8* const CR_asset_tile_93_png = asset_tile_93_png;
+const size_t CR_asset_tile_93_png_size = sizeof(asset_tile_93_png);
+static const Uint8 asset_tile_94_png[] = {
+#embed "CR_tile_94.png"
+};
+const Uint8* const CR_asset_tile_94_png = asset_tile_94_png;
+const size_t CR_asset_tile_94_png_size = sizeof(asset_tile_94_png);
+static const Uint8 asset_tile_95_png[] = {
+#embed "CR_tile_95.png"
+};
+const Uint8* const CR_asset_tile_95_png = asset_tile_95_png;
+const size_t CR_asset_tile_95_png_size = sizeof(asset_tile_95_png);
+static const Uint8 asset_tile_96_png[] = {
+#embed "CR_tile_96.png"
+};
+const Uint8* const CR_asset_tile_96_png = asset_tile_96_png;
+const size_t CR_asset_tile_96_png_size = sizeof(asset_tile_96_png);
+static const Uint8 asset_tile_97_png[] = {
+#embed "CR_tile_97.png"
+};
+const Uint8* const CR_asset_tile_97_png = asset_tile_97_png;
+const size_t CR_asset_tile_97_png_size = sizeof(asset_tile_97_png);
+static const Uint8 asset_tile_98_png[] = {
+#embed "CR_tile_98.png"
+};
+const Uint8* const CR_asset_tile_98_png = asset_tile_98_png;
+const size_t CR_asset_tile_98_png_size = sizeof(asset_tile_98_png);
+static const Uint8 asset_tile_99_png[] = {
+#embed "CR_tile_99.png"
+};
+const Uint8* const CR_asset_tile_99_png = asset_tile_99_png;
+const size_t CR_asset_tile_99_png_size = sizeof(asset_tile_99_png);
+static const Uint8 asset_tile_100_png[] = {
+#embed "CR_tile_100.png"
+};
+const Uint8* const CR_asset_tile_100_png = asset_tile_100_png;
+const size_t CR_asset_tile_100_png_size = sizeof(asset_tile_100_png);
+static const Uint8 asset_tile_101_png[] = {
+#embed "CR_tile_101.png"
+};
+const Uint8* const CR_asset_tile_101_png = asset_tile_101_png;
+const size_t CR_asset_tile_101_png_size = sizeof(asset_tile_101_png);
+static const Uint8 asset_tile_102_png[] = {
+#embed "CR_tile_102.png"
+};
+const Uint8* const CR_asset_tile_102_png = asset_tile_102_png;
+const size_t CR_asset_tile_102_png_size = sizeof(asset_tile_102_png);
+static const Uint8 asset_tile_103_png[] = {
+#embed "CR_tile_103.png"
+};
+const Uint8* const CR_asset_tile_103_png = asset_tile_103_png;
+const size_t CR_asset_tile_103_png_size = sizeof(asset_tile_103_png);
+static const Uint8 asset_tile_104_png[] = {
+#embed "CR_tile_104.png"
+};
+const Uint8* const CR_asset_tile_104_png = asset_tile_104_png;
+const size_t CR_asset_tile_104_png_size = sizeof(asset_tile_104_png);
+static const Uint8 asset_tile_105_png[] = {
+#embed "CR_tile_105.png"
+};
+const Uint8* const CR_asset_tile_105_png = asset_tile_105_png;
+const size_t CR_asset_tile_105_png_size = sizeof(asset_tile_105_png);
+static const Uint8 asset_tile_106_png[] = {
+#embed "CR_tile_106.png"
+};
+const Uint8* const CR_asset_tile_106_png = asset_tile_106_png;
+const size_t CR_asset_tile_106_png_size = sizeof(asset_tile_106_png);
+static const Uint8 asset_tile_107_png[] = {
+#embed "CR_tile_107.png"
+};
+const Uint8* const CR_asset_tile_107_png = asset_tile_107_png;
+const size_t CR_asset_tile_107_png_size = sizeof(asset_tile_107_png);
+static const Uint8 asset_tile_108_png[] = {
+#embed "CR_tile_108.png"
+};
+const Uint8* const CR_asset_tile_108_png = asset_tile_108_png;
+const size_t CR_asset_tile_108_png_size = sizeof(asset_tile_108_png);
+static const Uint8 asset_tile_109_png[] = {
+#embed "CR_tile_109.png"
+};
+const Uint8* const CR_asset_tile_109_png = asset_tile_109_png;
+const size_t CR_asset_tile_109_png_size = sizeof(asset_tile_109_png);
+static const Uint8 asset_tile_110_png[] = {
+#embed "CR_tile_110.png"
+};
+const Uint8* const CR_asset_tile_110_png = asset_tile_110_png;
+const size_t CR_asset_tile_110_png_size = sizeof(asset_tile_110_png);
+static const Uint8 asset_tile_111_png[] = {
+#embed "CR_tile_111.png"
+};
+const Uint8* const CR_asset_tile_111_png = asset_tile_111_png;
+const size_t CR_asset_tile_111_png_size = sizeof(asset_tile_111_png);
+static const Uint8 asset_tile_112_png[] = {
+#embed "CR_tile_112.png"
+};
+const Uint8* const CR_asset_tile_112_png = asset_tile_112_png;
+const size_t CR_asset_tile_112_png_size = sizeof(asset_tile_112_png);
+static const Uint8 asset_tile_113_png[] = {
+#embed "CR_tile_113.png"
+};
+const Uint8* const CR_asset_tile_113_png = asset_tile_113_png;
+const size_t CR_asset_tile_113_png_size = sizeof(asset_tile_113_png);
+static const Uint8 asset_tile_114_png[] = {
+#embed "CR_tile_114.png"
+};
+const Uint8* const CR_asset_tile_114_png = asset_tile_114_png;
+const size_t CR_asset_tile_114_png_size = sizeof(asset_tile_114_png);
+static const Uint8 asset_tile_115_png[] = {
+#embed "CR_tile_115.png"
+};
+const Uint8* const CR_asset_tile_115_png = asset_tile_115_png;
+const size_t CR_asset_tile_115_png_size = sizeof(asset_tile_115_png);
+static const Uint8 asset_tile_116_png[] = {
+#embed "CR_tile_116.png"
+};
+const Uint8* const CR_asset_tile_116_png = asset_tile_116_png;
+const size_t CR_asset_tile_116_png_size = sizeof(asset_tile_116_png);
+static const Uint8 asset_tile_117_png[] = {
+#embed "CR_tile_117.png"
+};
+const Uint8* const CR_asset_tile_117_png = asset_tile_117_png;
+const size_t CR_asset_tile_117_png_size = sizeof(asset_tile_117_png);
+static const Uint8 asset_tile_118_png[] = {
+#embed "CR_tile_118.png"
+};
+const Uint8* const CR_asset_tile_118_png = asset_tile_118_png;
+const size_t CR_asset_tile_118_png_size = sizeof(asset_tile_118_png);
+static const Uint8 asset_tile_119_png[] = {
+#embed "CR_tile_119.png"
+};
+const Uint8* const CR_asset_tile_119_png = asset_tile_119_png;
+const size_t CR_asset_tile_119_png_size = sizeof(asset_tile_119_png);
+static const Uint8 asset_tile_120_png[] = {
+#embed "CR_tile_120.png"
+};
+const Uint8* const CR_asset_tile_120_png = asset_tile_120_png;
+const size_t CR_asset_tile_120_png_size = sizeof(asset_tile_120_png);
+static const Uint8 asset_tile_121_png[] = {
+#embed "CR_tile_121.png"
+};
+const Uint8* const CR_asset_tile_121_png = asset_tile_121_png;
+const size_t CR_asset_tile_121_png_size = sizeof(asset_tile_121_png);
+static const Uint8 asset_tile_122_png[] = {
+    #embed "CR_tile_122.png"
+};
+const Uint8* const CR_asset_tile_122_png = asset_tile_122_png;
+const size_t CR_asset_tile_122_png_size = sizeof(asset_tile_122_png);
+static const Uint8 asset_tile_123_png[] = {
+    #embed "CR_tile_123.png"
+};
+const Uint8* const CR_asset_tile_123_png = asset_tile_123_png;
+const size_t CR_asset_tile_123_png_size = sizeof(asset_tile_123_png);
+static const Uint8 asset_tile_124_png[] = {
+    #embed "CR_tile_124.png"
+};
+const Uint8* const CR_asset_tile_124_png = asset_tile_124_png;
+const size_t CR_asset_tile_124_png_size = sizeof(asset_tile_124_png);
+static const Uint8 asset_tile_125_png[] = {
+    #embed "CR_tile_125.png"
+};
+const Uint8* const CR_asset_tile_125_png = asset_tile_125_png;
+const size_t CR_asset_tile_125_png_size = sizeof(asset_tile_125_png);
+static const Uint8 asset_tile_126_png[] = {
+    #embed "CR_tile_126.png"
+};
+const Uint8* const CR_asset_tile_126_png = asset_tile_126_png;
+const size_t CR_asset_tile_126_png_size = sizeof(asset_tile_126_png);
 
 static const Uint8 asset_player_idle_png[] = {
 #embed "CR_player_idle.png"
