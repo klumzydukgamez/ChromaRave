@@ -24,6 +24,38 @@ static const Uint8 asset_default_png[] = {
 const Uint8* const CR_asset_default_png = asset_default_png;
 const size_t CR_asset_default_png_size = sizeof(asset_default_png);
 
+static const Uint8 asset_blank_png[] = {
+#embed "CR_blank.png"
+};
+const Uint8* const CR_asset_blank_png = asset_blank_png;
+const size_t CR_asset_blank_png_size = sizeof(asset_blank_png);
+
+static const Uint8 asset_background_1_png[] = {
+#embed "CR_background_1.png"
+};
+const Uint8* const CR_asset_background_1_png = asset_background_1_png;
+const size_t CR_asset_background_1_png_size = sizeof(asset_background_1_png);
+static const Uint8 asset_background_2_png[] = {
+#embed "CR_background_2.png"
+};
+const Uint8* const CR_asset_background_2_png = asset_background_2_png;
+const size_t CR_asset_background_2_png_size = sizeof(asset_background_2_png);
+static const Uint8 asset_background_3_png[] = {
+#embed "CR_background_3.png"
+};
+const Uint8* const CR_asset_background_3_png = asset_background_3_png;
+const size_t CR_asset_background_3_png_size = sizeof(asset_background_3_png);
+static const Uint8 asset_background_4_png[] = {
+#embed "CR_background_4.png"
+};
+const Uint8* const CR_asset_background_4_png = asset_background_4_png;
+const size_t CR_asset_background_4_png_size = sizeof(asset_background_4_png);
+static const Uint8 asset_background_5_png[] = {
+#embed "CR_background_5.png"
+};
+const Uint8* const CR_asset_background_5_png = asset_background_5_png;
+const size_t CR_asset_background_5_png_size = sizeof(asset_background_5_png);
+
 static const Uint8 asset_player_idle_png[] = {
 #embed "CR_player_idle.png"
 };

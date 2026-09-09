@@ -44,6 +44,11 @@ bool CR_AppState_init(CR_AppState* state) {
 		return false;
 	}
 
+	if (!SDL_GL_SetSwapInterval(1)) {
+		CR_PANIC("SDL_GL_SetSwapInterval failed.");
+		return false;
+	}
+
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 
@@ -174,6 +179,55 @@ bool CR_AppState_init(CR_AppState* state) {
 		CR_PANIC("CR_AppState_pack_surface failed.");
 		return false;
 	}
+	if (!CR_AppState_pack_surface(
+			state,
+			CR_load_surface(CR_asset_blank_png, CR_asset_blank_png_size),
+			&state->blankSprite, true
+		)) {
+		CR_PANIC("CR_AppState_pack_surface failed.");
+		return false;
+	}
+
+	if (!CR_AppState_pack_surface(
+			state,
+			CR_load_surface(CR_asset_background_1_png, CR_asset_background_1_png_size),
+			&state->backgroundSprites[0], true
+		)) {
+		CR_PANIC("CR_AppState_pack_surface failed.");
+		return false;
+	}
+	if (!CR_AppState_pack_surface(
+			state,
+			CR_load_surface(CR_asset_background_2_png, CR_asset_background_2_png_size),
+			&state->backgroundSprites[1], true
+		)) {
+		CR_PANIC("CR_AppState_pack_surface failed.");
+		return false;
+	}
+	if (!CR_AppState_pack_surface(
+			state,
+			CR_load_surface(CR_asset_background_3_png, CR_asset_background_3_png_size),
+			&state->backgroundSprites[2], true
+		)) {
+		CR_PANIC("CR_AppState_pack_surface failed.");
+		return false;
+	}
+	if (!CR_AppState_pack_surface(
+			state,
+			CR_load_surface(CR_asset_background_4_png, CR_asset_background_4_png_size),
+			&state->backgroundSprites[3], true
+		)) {
+		CR_PANIC("CR_AppState_pack_surface failed.");
+		return false;
+	}
+	if (!CR_AppState_pack_surface(
+			state,
+			CR_load_surface(CR_asset_background_5_png, CR_asset_background_5_png_size),
+			&state->backgroundSprites[4], true
+		)) {
+		CR_PANIC("CR_AppState_pack_surface failed.");
+		return false;
+	}
 
 	if (!CR_AppState_pack_surface(
 			state,
@@ -199,6 +253,7 @@ bool CR_AppState_init(CR_AppState* state) {
 	state->playerFrameIndex = 0;
 	state->playerLastFrameTick = SDL_GetTicks();
 	state->playerPlaying = true;
+	state->playerFlip = false;
 
 	return true;
 }

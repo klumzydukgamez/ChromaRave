@@ -63,13 +63,14 @@ void CR_AppState_update_camera(CR_AppState* state) {
 		0.0f, (float)CR_WIDTH, (float)CR_HEIGHT,
 		0.0f, CR_CAMERA_NEAR, CR_CAMERA_FAR, projection
 	);
+	glm_mat4_copy(projection, state->uiProjView);
 	mat4 view;
 	glm_mat4_identity(view);
 	glm_translate(
 		view,
 		(vec3){
-			((float)CR_WIDTH / 2.0f),
-			((float)CR_HEIGHT / 2.0f),
+			CR_HALF_WIDTH,
+			CR_HALF_HEIGHT,
 			0.0f
 		}
 	);

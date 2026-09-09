@@ -3,7 +3,7 @@
 void CR_AppState_push_vertex(CR_AppState* state, const vec3 position, const vec2 texCoord, const vec4 color) {
 	if (state->vertexCount >= CR_MAX_VERTICES) {
 		CR_WARN("Vertices Full. Flushing.");
-		CR_AppState_flush_vertices(state);
+		CR_AppState_flush_vertices(state, false);
 	}
 
 	glm_vec3_copy((float*)position, state->vertices[state->vertexCount].position);
@@ -114,12 +114,15 @@ void CR_AppState_push_animated_sprite(CR_AppState* state, const SDL_FRect* sprit
 	);
 }
 
-void CR_AppState_flush_vertices(CR_AppState* state) {
+void CR_AppState_flush_vertices(CR_AppState* state, bool ui) {
 	if (state->vertexCount == 0)
 		return;
 
 	glUseProgram(state->sceneShader);
-	glUniformMatrix4fv(state->sceneUniformProjView, 1, GL_FALSE, (const GLfloat*)state->cameraProjView);
+	if (ui)
+		glUniformMatrix4fv(state->sceneUniformProjView, 1, GL_FALSE, (const GLfloat*)state->uiProjView);
+	else
+		glUniformMatrix4fv(state->sceneUniformProjView, 1, GL_FALSE, (const GLfloat*)state->cameraProjView);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, state->masterTexture);
 	glBindVertexArray(state->sceneVertexArray);

@@ -1,14 +1,18 @@
 #include "CR_shared.h"
 
 bool CR_AppState_iterate(CR_AppState* state) {
-	CR_AppState_update_player(state);
-	CR_AppState_update_camera(state);
-
 	glBindFramebuffer(GL_FRAMEBUFFER, state->finalFramebuffer);
 	glViewport(0, 0, CR_WIDTH, CR_HEIGHT);
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	CR_AppState_flush_vertices(state);
+
+	CR_AppState_update_player(state);
+	CR_AppState_update_camera(state);
+
+	CR_AppState_draw_background(state);
+	CR_AppState_draw_player(state);
+
+	CR_AppState_flush_vertices(state, false);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	int w, h;

@@ -52,6 +52,7 @@ typedef struct {
 	} cameraShakes[CR_MAX_CAMERA_SHAKES];
 	int cameraShakeCount;
 	mat4 cameraProjView;
+	mat4 uiProjView;
 
 	GLuint masterTexture;
 	int masterX;
@@ -59,6 +60,8 @@ typedef struct {
 	int masterOffset;
 
 	SDL_FRect defaultSprite;
+	SDL_FRect blankSprite;
+	SDL_FRect backgroundSprites[CR_BACKGROUND_LAYER_COUNT];
 	SDL_FRect playerSprites[CR_EPlayerAnim_COUNT];
 
 	vec2 playerPosition;
@@ -68,6 +71,7 @@ typedef struct {
 	int playerFrameIndex;
 	Uint64 playerLastFrameTick;
 	bool playerPlaying;
+	bool playerFlip;
 } CR_AppState;
 
 void CR_AppState_update_input(CR_AppState* state);
@@ -85,14 +89,17 @@ bool CR_AppState_mouse_held(CR_AppState* state, int button, Uint64 time);
 void CR_AppState_push_vertex(CR_AppState* state, const vec3 position, const vec2 texCoord, const vec4 color);
 void CR_AppState_push_sprite(CR_AppState* state, const SDL_FRect* sprite, const vec3 position, const vec2 size, const vec4 color, bool flip);
 void CR_AppState_push_animated_sprite(CR_AppState* state, const SDL_FRect* sprite, const vec3 position, const vec2 size, const vec4 color, bool flip, int length, int frame);
-void CR_AppState_flush_vertices(CR_AppState* state);
+void CR_AppState_flush_vertices(CR_AppState* state, bool ui);
 
 void CR_AppState_shake_camera(CR_AppState* state, vec2 origin, vec2 direction, float radius, float intensity, float decay);
 void CR_AppState_update_camera(CR_AppState* state);
 
 bool CR_AppState_pack_surface(CR_AppState* state, SDL_Surface* surface, SDL_FRect* sprite, bool cleanup);
 
+void CR_AppState_draw_background(CR_AppState* state);
+
 void CR_AppState_update_player(CR_AppState* state);
+void CR_AppState_draw_player(CR_AppState* state);
 
 bool CR_AppState_init(CR_AppState* state);
 void CR_AppState_quit(CR_AppState* state);

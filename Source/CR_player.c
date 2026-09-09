@@ -13,10 +13,12 @@ void CR_AppState_update_player(CR_AppState* state) {
 	else
 		state->playerVelocity[0] += copysignf(horizontalRate, horizontalDiff);
 
+	/*
 	if (SDL_fabsf(state->playerVelocity[0]) > 0.0f)
-		state->cameraTargetZoom = 0.5f;
+		state->cameraTargetZoom = 0.8f;
 	else
 		state->cameraTargetZoom = 1.0f;
+	*/
 
 	glm_vec2_add(state->playerPosition, state->playerVelocity, state->playerPosition);
 
@@ -48,18 +50,17 @@ void CR_AppState_update_player(CR_AppState* state) {
 			}
 		}
 	}
+}
 
-	CR_AppState_push_sprite(
-		state, &state->defaultSprite,
-		(vec3){0.0f, 0.0f, 0.0f},
-		(vec2){256.0f, 256.0f},
-		(vec4){-0.5f, -0.5f, -0.5f, 1.0f},
-		false
-	);
-	bool flip = SDL_copysignf(1.0f, state->playerVelocity[0]) < 0;
+void CR_AppState_draw_player(CR_AppState* state) {
+	float dir = SDL_copysignf(1.0f, state->playerVelocity[0]);
+	if (state->playerVelocity[0] != 0 && dir > 0)
+		state->playerFlip = false;
+	if (state->playerVelocity[0] != 0 && dir < 0)
+		state->playerFlip = true;
 	vec2 offset;
 	glm_vec2_zero(offset);
-	if (flip)
+	if (state->playerFlip)
 		glm_vec2_copy((float*)CR_PLAYER_FLIP_OFFSET, offset);
 	CR_AppState_push_animated_sprite(
 		state, &state->playerSprites[state->playerAnimation],
@@ -70,7 +71,7 @@ void CR_AppState_update_player(CR_AppState* state) {
 		},
 		(vec2){48.0f, 48.0f},
 		(vec4){0.0f, 0.0f, 0.0f, 0.0f},
-		flip,
+		state->playerFlip,
 		CR_PLAYER_ANIM_LENGTHS[state->playerAnimation], state->playerFrameIndex
 	);
 }
