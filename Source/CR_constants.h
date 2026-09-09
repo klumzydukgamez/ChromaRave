@@ -47,8 +47,8 @@ constexpr vec4 CR_BACKGROUND_BOTTOM_COLOR = {
 	128.0f / 255.0f,
 	1.0f
 };
-constexpr int CR_BACKGROUND_COL_COUNT = 3;
-constexpr int CR_BACKGROUND_ROW_COUNT = 3;
+constexpr int CR_BACKGROUND_COLS = 3;
+constexpr int CR_BACKGROUND_ROWS = 3;
 constexpr vec2 CR_BACKGROUND_FACTORS[CR_BACKGROUND_LAYER_COUNT] = {
 	{0.0f, 0.0f},
 	{0.15f, 0.08f},
@@ -56,6 +56,12 @@ constexpr vec2 CR_BACKGROUND_FACTORS[CR_BACKGROUND_LAYER_COUNT] = {
 	{0.60f, 0.40f},
 	{0.85f, 0.65f}
 };
+
+constexpr int CR_TILE_COLS = 512;
+constexpr int CR_TILE_ROWS = 256;
+constexpr int CR_TILE_MAX = 71;
+constexpr int CR_TILE_WIDTH = 32;
+constexpr int CR_TILE_HEIGHT = 32;
 
 constexpr SDL_Scancode CR_PLAYER_LEFT = SDL_SCANCODE_A;
 constexpr SDL_Scancode CR_PLAYER_RIGHT = SDL_SCANCODE_D;

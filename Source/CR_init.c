@@ -45,7 +45,7 @@ bool CR_AppState_init(CR_AppState* state) {
 	}
 
 	if (!SDL_GL_SetSwapInterval(1)) {
-		CR_PANIC("SDL_GL_SetSwapInterval failed.");
+		CR_PANIC("SDL_GL_SetSwapInterval failed. %s", SDL_GetError());
 		return false;
 	}
 
@@ -229,6 +229,77 @@ bool CR_AppState_init(CR_AppState* state) {
 		return false;
 	}
 
+	CR_PACK_TILE(1);
+	CR_PACK_TILE(2);
+	CR_PACK_TILE(3);
+	CR_PACK_TILE(4);
+	CR_PACK_TILE(5);
+	CR_PACK_TILE(6);
+	CR_PACK_TILE(7);
+	CR_PACK_TILE(8);
+	CR_PACK_TILE(9);
+	CR_PACK_TILE(10);
+	CR_PACK_TILE(11);
+	CR_PACK_TILE(12);
+	CR_PACK_TILE(13);
+	CR_PACK_TILE(14);
+	CR_PACK_TILE(15);
+	CR_PACK_TILE(16);
+	CR_PACK_TILE(17);
+	CR_PACK_TILE(18);
+	CR_PACK_TILE(19);
+	CR_PACK_TILE(20);
+	CR_PACK_TILE(21);
+	CR_PACK_TILE(22);
+	CR_PACK_TILE(23);
+	CR_PACK_TILE(24);
+	CR_PACK_TILE(25);
+	CR_PACK_TILE(26);
+	CR_PACK_TILE(27);
+	CR_PACK_TILE(28);
+	CR_PACK_TILE(29);
+	CR_PACK_TILE(30);
+	CR_PACK_TILE(31);
+	CR_PACK_TILE(32);
+	CR_PACK_TILE(33);
+	CR_PACK_TILE(34);
+	CR_PACK_TILE(35);
+	CR_PACK_TILE(36);
+	CR_PACK_TILE(37);
+	CR_PACK_TILE(38);
+	CR_PACK_TILE(39);
+	CR_PACK_TILE(40);
+	CR_PACK_TILE(41);
+	CR_PACK_TILE(42);
+	CR_PACK_TILE(43);
+	CR_PACK_TILE(44);
+	CR_PACK_TILE(45);
+	CR_PACK_TILE(46);
+	CR_PACK_TILE(47);
+	CR_PACK_TILE(48);
+	CR_PACK_TILE(49);
+	CR_PACK_TILE(50);
+	CR_PACK_TILE(51);
+	CR_PACK_TILE(52);
+	CR_PACK_TILE(53);
+	CR_PACK_TILE(54);
+	CR_PACK_TILE(55);
+	CR_PACK_TILE(56);
+	CR_PACK_TILE(57);
+	CR_PACK_TILE(58);
+	CR_PACK_TILE(59);
+	CR_PACK_TILE(60);
+	CR_PACK_TILE(61);
+	CR_PACK_TILE(62);
+	CR_PACK_TILE(63);
+	CR_PACK_TILE(64);
+	CR_PACK_TILE(65);
+	CR_PACK_TILE(66);
+	CR_PACK_TILE(67);
+	CR_PACK_TILE(68);
+	CR_PACK_TILE(69);
+	CR_PACK_TILE(70);
+
 	if (!CR_AppState_pack_surface(
 			state,
 			CR_load_surface(CR_asset_player_idle_png, CR_asset_player_idle_png_size),
@@ -243,6 +314,16 @@ bool CR_AppState_init(CR_AppState* state) {
 			&state->playerSprites[CR_EPlayerAnim_RUN], true
 		)) {
 		CR_PANIC("CR_AppState_pack_surface failed.");
+		return false;
+	}
+
+	SDL_memset(&state->tiles, 0, sizeof(state->tiles));
+	if (!CR_AppState_load_level(
+			state,
+			CR_load_surface(CR_asset_level_png, CR_asset_level_png_size),
+			true
+		)) {
+		CR_PANIC("CR_AppState_load_level failed.");
 		return false;
 	}
 

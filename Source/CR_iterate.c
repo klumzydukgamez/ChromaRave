@@ -10,6 +10,7 @@ bool CR_AppState_iterate(CR_AppState* state) {
 	CR_AppState_update_camera(state);
 
 	CR_AppState_draw_background(state);
+	CR_AppState_draw_level(state);
 	CR_AppState_draw_player(state);
 
 	CR_AppState_flush_vertices(state, false);

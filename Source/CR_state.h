@@ -62,7 +62,10 @@ typedef struct {
 	SDL_FRect defaultSprite;
 	SDL_FRect blankSprite;
 	SDL_FRect backgroundSprites[CR_BACKGROUND_LAYER_COUNT];
+	SDL_FRect tileSprites[CR_TILE_MAX];
 	SDL_FRect playerSprites[CR_EPlayerAnim_COUNT];
+
+	int tiles[CR_TILE_ROWS][CR_TILE_COLS];
 
 	vec2 playerPosition;
 	vec2 playerVelocity;
@@ -97,6 +100,9 @@ void CR_AppState_update_camera(CR_AppState* state);
 bool CR_AppState_pack_surface(CR_AppState* state, SDL_Surface* surface, SDL_FRect* sprite, bool cleanup);
 
 void CR_AppState_draw_background(CR_AppState* state);
+
+bool CR_AppState_load_level(CR_AppState* state, SDL_Surface* surface, bool cleanup);
+void CR_AppState_draw_level(CR_AppState* state);
 
 void CR_AppState_update_player(CR_AppState* state);
 void CR_AppState_draw_player(CR_AppState* state);

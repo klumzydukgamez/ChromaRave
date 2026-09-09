@@ -48,8 +48,8 @@ void CR_AppState_draw_background(CR_AppState* state) {
 			x += CR_BACKGROUND_WIDTH;
 		if (y < 0.0f)
 			y += CR_BACKGROUND_HEIGHT;
-		for (int r = 0; r < CR_BACKGROUND_ROW_COUNT; r++) {
-			for (int c = 0; c < CR_BACKGROUND_COL_COUNT; c++) {
+		for (int r = 0; r < CR_BACKGROUND_ROWS; r++) {
+			for (int c = 0; c < CR_BACKGROUND_COLS; c++) {
 				CR_AppState_push_sprite(
 					state, &state->backgroundSprites[i],
 					(vec3){

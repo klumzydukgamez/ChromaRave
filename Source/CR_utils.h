@@ -12,6 +12,16 @@
 #define CR_INFO(format, ...) \
 	SDL_Log("[INFO][%s][%d] " format, __FILE_NAME__, __LINE__, ##__VA_ARGS__)
 
+#define CR_PACK_TILE(tile)                                                                \
+	if (!CR_AppState_pack_surface(                                                        \
+			state,                                                                        \
+			CR_load_surface(CR_asset_tile_##tile##_png, CR_asset_tile_##tile##_png_size), \
+			&state->tileSprites[tile], true                                               \
+		)) {                                                                              \
+		CR_PANIC("CR_AppState_pack_surface failed.");                                     \
+		return false;                                                                     \
+	}
+
 float CR_random_shake_intensity();
 
 GLuint CR_compile_shader(const char* const vertSource, const char* const fragSource);
