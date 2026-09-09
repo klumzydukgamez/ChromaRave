@@ -67,6 +67,8 @@ typedef struct {
 
 	int tiles[CR_TILE_ROWS][CR_TILE_COLS];
 
+	bool godMode;
+
 	vec2 playerPosition;
 	vec2 playerVelocity;
 	CR_EPlayerAnim playerAnimation;
@@ -101,8 +103,12 @@ bool CR_AppState_pack_surface(CR_AppState* state, SDL_Surface* surface, SDL_FRec
 
 void CR_AppState_draw_background(CR_AppState* state);
 
+void CR_AppState_draw_tiles(CR_AppState* state);
+
 bool CR_AppState_load_level(CR_AppState* state, SDL_Surface* surface, bool cleanup);
-void CR_AppState_draw_level(CR_AppState* state);
+
+void CR_AppState_update_player_god_mode(CR_AppState* state);
+void CR_AppState_draw_player_god_mode(CR_AppState* state);
 
 void CR_AppState_update_player(CR_AppState* state);
 void CR_AppState_draw_player(CR_AppState* state);

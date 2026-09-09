@@ -358,6 +358,14 @@ bool CR_AppState_init(CR_AppState* state) {
 
 	if (!CR_AppState_pack_surface(
 			state,
+			CR_load_surface(CR_asset_player_god_mode_png, CR_asset_player_god_mode_png_size),
+			&state->playerSprites[CR_EPlayerAnim_GOD_MODE], true
+		)) {
+		CR_PANIC("CR_AppState_pack_surface failed.");
+		return false;
+	}
+	if (!CR_AppState_pack_surface(
+			state,
 			CR_load_surface(CR_asset_player_idle_png, CR_asset_player_idle_png_size),
 			&state->playerSprites[CR_EPlayerAnim_IDLE], true
 		)) {
@@ -383,7 +391,8 @@ bool CR_AppState_init(CR_AppState* state) {
 		return false;
 	}
 
-	glm_vec2_zero(state->playerPosition);
+	state->godMode = false;
+
 	glm_vec2_zero(state->playerVelocity);
 	state->playerAnimation = CR_EPlayerAnim_IDLE;
 	state->playerLastAnimation = CR_EPlayerAnim_IDLE;

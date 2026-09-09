@@ -12,6 +12,9 @@
 #define CR_INFO(format, ...) \
 	SDL_Log("[INFO][%s][%d] " format, __FILE_NAME__, __LINE__, ##__VA_ARGS__)
 
+#define CR_TILE_ASSET_HEADER(tile)                        \
+	extern const Uint8* const CR_asset_tile_##tile##_png; \
+	extern const size_t CR_asset_tile_##tile##_png_size;
 #define CR_PACK_TILE(tile)                                                                \
 	if (!CR_AppState_pack_surface(                                                        \
 			state,                                                                        \

@@ -35,6 +35,22 @@ bool CR_AppState_load_level(CR_AppState* state, SDL_Surface* surface, bool clean
 			if (r > CR_TILE_MAX)
 				r = 0;
 			state->tiles[y][x] = (int)r;
+			switch (g) {
+				case CR_LEVEL_GREEN_PLAYER:
+					glm_vec2_copy(
+						(vec2){
+							CR_TILE_WIDTH * x, CR_TILE_HEIGHT * y
+						},
+						state->playerPosition
+					);
+					glm_vec2_copy(
+						state->playerPosition,
+						state->cameraPosition
+					);
+					break;
+				default:
+					break;
+			}
 		}
 	}
 
@@ -45,30 +61,4 @@ bool CR_AppState_load_level(CR_AppState* state, SDL_Surface* surface, bool clean
 		SDL_DestroySurface(surface);
 
 	return true;
-}
-
-void CR_AppState_draw_level(CR_AppState* state) {
-	for (int r = 0; r < CR_TILE_ROWS; r++) {
-		for (int c = 0; c < CR_TILE_COLS; c++) {
-			int tile = state->tiles[r][c];
-			if (!tile)
-				continue;
-			CR_AppState_push_sprite(
-				state, &state->tileSprites[tile],
-				(vec3){
-					(float)CR_TILE_WIDTH * c,
-					(float)CR_TILE_HEIGHT * r,
-					0.0f
-				},
-				(vec2){
-					(float)CR_TILE_WIDTH,
-					(float)CR_TILE_HEIGHT
-				},
-				(vec4){
-					0.0f, 0.0f, 0.0f, 0.0f
-				},
-				false
-			);
-		}
-	}
 }

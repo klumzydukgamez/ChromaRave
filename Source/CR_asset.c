@@ -668,31 +668,36 @@ static const Uint8 asset_tile_121_png[] = {
 const Uint8* const CR_asset_tile_121_png = asset_tile_121_png;
 const size_t CR_asset_tile_121_png_size = sizeof(asset_tile_121_png);
 static const Uint8 asset_tile_122_png[] = {
-    #embed "CR_tile_122.png"
+#embed "CR_tile_122.png"
 };
 const Uint8* const CR_asset_tile_122_png = asset_tile_122_png;
 const size_t CR_asset_tile_122_png_size = sizeof(asset_tile_122_png);
 static const Uint8 asset_tile_123_png[] = {
-    #embed "CR_tile_123.png"
+#embed "CR_tile_123.png"
 };
 const Uint8* const CR_asset_tile_123_png = asset_tile_123_png;
 const size_t CR_asset_tile_123_png_size = sizeof(asset_tile_123_png);
 static const Uint8 asset_tile_124_png[] = {
-    #embed "CR_tile_124.png"
+#embed "CR_tile_124.png"
 };
 const Uint8* const CR_asset_tile_124_png = asset_tile_124_png;
 const size_t CR_asset_tile_124_png_size = sizeof(asset_tile_124_png);
 static const Uint8 asset_tile_125_png[] = {
-    #embed "CR_tile_125.png"
+#embed "CR_tile_125.png"
 };
 const Uint8* const CR_asset_tile_125_png = asset_tile_125_png;
 const size_t CR_asset_tile_125_png_size = sizeof(asset_tile_125_png);
 static const Uint8 asset_tile_126_png[] = {
-    #embed "CR_tile_126.png"
+#embed "CR_tile_126.png"
 };
 const Uint8* const CR_asset_tile_126_png = asset_tile_126_png;
 const size_t CR_asset_tile_126_png_size = sizeof(asset_tile_126_png);
 
+static const Uint8 asset_player_god_mode_png[] = {
+#embed "CR_player_god_mode.png"
+};
+const Uint8* const CR_asset_player_god_mode_png = asset_player_god_mode_png;
+const size_t CR_asset_player_god_mode_png_size = sizeof(asset_player_god_mode_png);
 static const Uint8 asset_player_idle_png[] = {
 #embed "CR_player_idle.png"
 };

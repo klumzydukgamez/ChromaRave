@@ -63,6 +63,14 @@ constexpr int CR_TILE_MAX = 126 + 1;
 constexpr int CR_TILE_WIDTH = 32;
 constexpr int CR_TILE_HEIGHT = 32;
 
+constexpr int CR_LEVEL_GREEN_PLAYER = 1;
+
+constexpr bool CR_ALLOW_GOD_MODE = true;
+constexpr SDL_Scancode CR_GOD_MODE = SDL_SCANCODE_G;
+constexpr SDL_Scancode CR_GOD_MODE_UP = SDL_SCANCODE_W;
+constexpr SDL_Scancode CR_GOD_MODE_DOWN = SDL_SCANCODE_S;
+constexpr float CR_GOD_MODE_SPEED = 8.0f;
+
 constexpr SDL_Scancode CR_PLAYER_LEFT = SDL_SCANCODE_A;
 constexpr SDL_Scancode CR_PLAYER_RIGHT = SDL_SCANCODE_D;
 constexpr float CR_PLAYER_MOVE_SPEED = 4.0f;
