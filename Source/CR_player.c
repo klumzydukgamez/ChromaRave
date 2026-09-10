@@ -1,6 +1,9 @@
 #include "CR_shared.h"
 
 void CR_AppState_update_player(CR_AppState* state) {
+	ivec2 min;
+	ivec2 max;
+
 	float horizontalInput = (float)CR_AppState_keyboard_down(state, CR_PLAYER_RIGHT) -
 							(float)CR_AppState_keyboard_down(state, CR_PLAYER_LEFT);
 	float horizontalVel = horizontalInput * CR_PLAYER_MOVE_SPEED;
@@ -13,21 +16,99 @@ void CR_AppState_update_player(CR_AppState* state) {
 	else
 		state->playerVelocity[0] += copysignf(horizontalRate, horizontalDiff);
 
-	/*
-	if (SDL_fabsf(state->playerVelocity[0]) > 0.0f)
-		state->cameraTargetZoom = 0.9f;
-	else
-		state->cameraTargetZoom = 1.0f;
-	*/
+	state->playerPosition[0] += state->playerVelocity[0];
 
-	glm_vec2_add(state->playerPosition, state->playerVelocity, state->playerPosition);
+	min[0] = (int)(state->playerPosition[0] / CR_TILE_WIDTH);
+	min[1] = (int)(state->playerPosition[1] / CR_TILE_HEIGHT);
+	max[0] = (int)((state->playerPosition[0] + CR_PLAYER_WIDTH) / CR_TILE_WIDTH);
+	max[1] = (int)((state->playerPosition[1] + CR_PLAYER_HEIGHT) / CR_TILE_HEIGHT);
+
+	if (min[0] < 0)
+		min[0] = 0;
+	if (min[1] < 0)
+		min[1] = 0;
+	if (max[0] >= CR_TILE_COLS)
+		max[0] = CR_TILE_COLS - 1;
+	if (max[1] >= CR_TILE_ROWS)
+		max[1] = CR_TILE_ROWS - 1;
+
+	for (int x = min[0]; x <= max[0]; x++) {
+		for (int y = min[1]; y <= max[1]; y++) {
+			if (!state->tiles[y][x])
+				continue;
+			vec2 tileMin = {
+				x * CR_TILE_WIDTH,
+				y * CR_TILE_HEIGHT
+			};
+			vec2 tileMax = {
+				tileMin[0] + CR_TILE_WIDTH,
+				tileMin[1] + CR_TILE_HEIGHT
+			};
+			if ((state->playerPosition[0] < tileMax[0] && (state->playerPosition[0] + CR_PLAYER_WIDTH) > tileMin[0]) &&
+				(state->playerPosition[1] < tileMax[1] && (state->playerPosition[1] + CR_PLAYER_HEIGHT) > tileMin[1])) {
+				if (state->playerVelocity[0] > 0.0f)
+					state->playerPosition[0] = tileMin[0] - CR_PLAYER_WIDTH;
+				else if (state->playerVelocity[0] < 0.0f)
+					state->playerPosition[0] = tileMax[0];
+				state->playerVelocity[0] = 0.0f;
+			}
+		}
+	}
+
+	if (CR_AppState_keyboard_pressed(state, CR_PLAYER_JUMP) && state->playerOnGround) {
+		state->playerVelocity[1] = CR_PLAYER_JUMP_SPEED;
+		state->playerOnGround = false;
+	}
+	state->playerVelocity[1] += CR_PLAYER_GRAVITY;
+	if (state->playerVelocity[1] >= CR_PLAYER_TERMINAL_VEL)
+		state->playerVelocity[1] = CR_PLAYER_TERMINAL_VEL;
+	state->playerPosition[1] += state->playerVelocity[1];
+
+	min[0] = (int)(state->playerPosition[0] / CR_TILE_WIDTH);
+	min[1] = (int)(state->playerPosition[1] / CR_TILE_HEIGHT);
+	max[0] = (int)((state->playerPosition[0] + CR_PLAYER_WIDTH) / CR_TILE_WIDTH);
+	max[1] = (int)((state->playerPosition[1] + CR_PLAYER_HEIGHT) / CR_TILE_HEIGHT);
+
+	if (min[0] < 0)
+		min[0] = 0;
+	if (min[1] < 0)
+		min[1] = 0;
+	if (max[0] >= CR_TILE_COLS)
+		max[0] = CR_TILE_COLS - 1;
+	if (max[1] >= CR_TILE_ROWS)
+		max[1] = CR_TILE_ROWS - 1;
+
+	state->playerOnGround = false;
+	for (int x = min[0]; x <= max[0]; x++) {
+		for (int y = min[1]; y <= max[1]; y++) {
+			if (!state->tiles[y][x])
+				continue;
+			vec2 tileMin = {
+				x * CR_TILE_WIDTH,
+				y * CR_TILE_HEIGHT
+			};
+			vec2 tileMax = {
+				tileMin[0] + CR_TILE_WIDTH,
+				tileMin[1] + CR_TILE_HEIGHT
+			};
+			if ((state->playerPosition[0] < tileMax[0] && (state->playerPosition[0] + CR_PLAYER_WIDTH) > tileMin[0]) &&
+				(state->playerPosition[1] < tileMax[1] && (state->playerPosition[1] + CR_PLAYER_HEIGHT) > tileMin[1])) {
+				if (state->playerVelocity[1] > 0.0f) {
+					state->playerPosition[1] = tileMin[1] - CR_PLAYER_HEIGHT;
+					state->playerOnGround = true;
+				} else if (state->playerVelocity[1] < 0.0f)
+					state->playerPosition[1] = tileMax[1];
+				state->playerVelocity[1] = 0.0f;
+			}
+		}
+	}
 
 	vec2 cameraTarget;
 	glm_vec2_copy(state->playerPosition, cameraTarget);
 	glm_vec2_sub(cameraTarget, (vec2){-24.0f, -24.0f}, cameraTarget);
 	glm_vec2_copy(cameraTarget, state->cameraTargetPosition);
 
-	if (SDL_fabsf(state->playerVelocity[0]) > 0.1f)
+	if (SDL_fabsf(state->playerVelocity[0]) > 0.1f || (CR_AppState_keyboard_down(state, CR_PLAYER_LEFT) || CR_AppState_keyboard_down(state, CR_PLAYER_RIGHT)))
 		state->playerAnimation = CR_EPlayerAnim_RUN;
 	else
 		state->playerAnimation = CR_EPlayerAnim_IDLE;

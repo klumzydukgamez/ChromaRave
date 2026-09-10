@@ -71,6 +71,7 @@ typedef struct {
 
 	vec2 playerPosition;
 	vec2 playerVelocity;
+	bool playerOnGround;
 	CR_EPlayerAnim playerAnimation;
 	CR_EPlayerAnim playerLastAnimation;
 	int playerFrameIndex;

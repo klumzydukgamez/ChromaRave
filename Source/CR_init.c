@@ -394,6 +394,7 @@ bool CR_AppState_init(CR_AppState* state) {
 	state->godMode = false;
 
 	glm_vec2_zero(state->playerVelocity);
+	state->playerOnGround = false;
 	state->playerAnimation = CR_EPlayerAnim_IDLE;
 	state->playerLastAnimation = CR_EPlayerAnim_IDLE;
 	state->playerFrameIndex = 0;
