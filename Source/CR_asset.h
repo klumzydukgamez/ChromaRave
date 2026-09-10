@@ -16,6 +16,9 @@ extern const size_t CR_asset_default_png_size;
 extern const Uint8* const CR_asset_blank_png;
 extern const size_t CR_asset_blank_png_size;
 
+extern const Uint8* const CR_asset_overlay_png;
+extern const size_t CR_asset_overlany_png_size;
+
 extern const Uint8* const CR_asset_background_1_png;
 extern const size_t CR_asset_background_1_png_size;
 extern const Uint8* const CR_asset_background_2_png;
@@ -163,5 +166,7 @@ extern const Uint8* const CR_asset_player_idle_png;
 extern const size_t CR_asset_player_idle_png_size;
 extern const Uint8* const CR_asset_player_run_png;
 extern const size_t CR_asset_player_run_png_size;
+extern const Uint8* const CR_asset_player_jump_png;
+extern const size_t CR_asset_player_jump_png_size;
 
 #endif /* __CR_ASSET_H__ */

@@ -30,6 +30,12 @@ static const Uint8 asset_blank_png[] = {
 const Uint8* const CR_asset_blank_png = asset_blank_png;
 const size_t CR_asset_blank_png_size = sizeof(asset_blank_png);
 
+static const Uint8 asset_overlay_png[] = {
+#embed "CR_overlay.png"
+};
+const Uint8* const CR_asset_overlay_png = asset_overlay_png;
+const size_t CR_asset_overlany_png_size = sizeof(asset_overlay_png);
+
 static const Uint8 asset_background_1_png[] = {
 #embed "CR_background_1.png"
 };
@@ -708,3 +714,8 @@ static const Uint8 asset_player_run_png[] = {
 };
 const Uint8* const CR_asset_player_run_png = asset_player_run_png;
 const size_t CR_asset_player_run_png_size = sizeof(asset_player_run_png);
+static const Uint8 asset_player_jump_png[] = {
+#embed "CR_player_jump.png"
+};
+const Uint8* const CR_asset_player_jump_png = asset_player_jump_png;
+const size_t CR_asset_player_jump_png_size = sizeof(asset_player_jump_png);

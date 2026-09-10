@@ -11,9 +11,9 @@ constexpr float CR_HALF_HEIGHT = (float)CR_HEIGHT / 2.0f;
 constexpr float CR_ASPECT = (float)CR_WIDTH / (float)CR_HEIGHT;
 
 constexpr int CR_MAX_KEYBOARD_KEYS = SDL_SCANCODE_COUNT;
-constexpr Uint64 CR_KEYBOARD_KEY_HOLD_TIME = 250;
+constexpr Uint64 CR_KEYBOARD_KEY_HOLD_TIME = 150;
 constexpr int CR_MAX_MOUSE_BUTTONS = 9;
-constexpr Uint64 CR_MOUSE_BUTTON_HOLD_TIME = 250;
+constexpr Uint64 CR_MOUSE_BUTTON_HOLD_TIME = 150;
 
 constexpr int CR_MAX_SPRITES = 1024;
 constexpr int CR_MAX_VERTICES = CR_MAX_SPRITES * 4;
@@ -69,19 +69,25 @@ constexpr bool CR_ALLOW_GOD_MODE = true;
 constexpr SDL_Scancode CR_GOD_MODE = SDL_SCANCODE_G;
 constexpr SDL_Scancode CR_GOD_MODE_UP = SDL_SCANCODE_W;
 constexpr SDL_Scancode CR_GOD_MODE_DOWN = SDL_SCANCODE_S;
-constexpr float CR_GOD_MODE_SPEED = 12.0f;
+constexpr SDL_Scancode CR_GOD_MODE_BOOST = SDL_SCANCODE_SPACE;
+constexpr float CR_GOD_MODE_SPEED = 8.0f;
+constexpr float CR_GOD_MODE_BOOST_SPEED = 12.0f / CR_GOD_MODE_SPEED;
 
 constexpr SDL_Scancode CR_PLAYER_LEFT = SDL_SCANCODE_A;
 constexpr SDL_Scancode CR_PLAYER_RIGHT = SDL_SCANCODE_D;
 constexpr SDL_Scancode CR_PLAYER_JUMP = SDL_SCANCODE_SPACE;
 constexpr int CR_PLAYER_WIDTH = 48;
 constexpr int CR_PLAYER_HEIGHT = 48;
+constexpr SDL_FRect CR_PLAYER_COLLISION = {6.0f, 18.0f, 16.0f, 30.0f};
 constexpr float CR_PLAYER_MOVE_SPEED = 5.0f;
 constexpr float CR_PLAYER_JUMP_SPEED = -12.0f;
+constexpr float CR_PLAYER_SMALL_JUMP_SPEED = -2.0f / CR_PLAYER_JUMP_SPEED;
+constexpr Uint64 CR_PLAYER_JUMP_TIME = 75;
+constexpr Uint64 CR_PLAYER_COYOTE_TIME = 75;
 constexpr float CR_PLAYER_GRAVITY = 0.6f;
 constexpr float CR_PLAYER_TERMINAL_VEL = 30.0f;
 constexpr float CR_PLAYER_ACCELERATION = 50.0f;
 constexpr float CR_PLAYER_DECELERATION = 40.0f;
-constexpr vec2 CR_PLAYER_FLIP_OFFSET = {24.0f, 0.0f};
+constexpr vec2 CR_PLAYER_FLIP_OFFSET = {20.0f, 0.0f};
 
 #endif /* __CR_CONSTANTS_H__ */

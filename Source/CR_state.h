@@ -61,6 +61,7 @@ typedef struct {
 
 	SDL_FRect defaultSprite;
 	SDL_FRect blankSprite;
+	SDL_FRect overlaySprite;
 	SDL_FRect backgroundSprites[CR_BACKGROUND_LAYER_COUNT];
 	SDL_FRect tileSprites[CR_TILE_MAX];
 	SDL_FRect playerSprites[CR_EPlayerAnim_COUNT];
@@ -68,10 +69,13 @@ typedef struct {
 	int tiles[CR_TILE_ROWS][CR_TILE_COLS];
 
 	bool godMode;
+	bool godModeBoost;
 
 	vec2 playerPosition;
 	vec2 playerVelocity;
 	bool playerOnGround;
+	Uint64 playerLastGroundTick;
+	Uint64 playerLastJumpTick;
 	CR_EPlayerAnim playerAnimation;
 	CR_EPlayerAnim playerLastAnimation;
 	int playerFrameIndex;

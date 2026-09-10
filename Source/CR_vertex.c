@@ -63,6 +63,8 @@ void CR_AppState_push_sprite(CR_AppState* state, const SDL_FRect* sprite, const 
 }
 
 void CR_AppState_push_animated_sprite(CR_AppState* state, const SDL_FRect* sprite, const vec3 position, const vec2 size, const vec4 color, bool flip, int length, int frame) {
+	if (length < 1)
+		length = 1;
 	float w = sprite->w / (float)length;
 	int wrapped = ((frame % length) + frame) % length;
 	float x = sprite->x + (wrapped * w);

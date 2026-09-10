@@ -1,8 +1,10 @@
 #include "CR_shared.h"
 
 bool CR_AppState_iterate(CR_AppState* state) {
-	if (CR_AppState_keyboard_pressed(state, CR_GOD_MODE) && CR_ALLOW_GOD_MODE)
+	if (CR_AppState_keyboard_pressed(state, CR_GOD_MODE) && CR_ALLOW_GOD_MODE) {
 		state->godMode = !state->godMode;
+		CR_INFO("God Mode. %d.", state->godMode);
+	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, state->finalFramebuffer);
 	glViewport(0, 0, CR_WIDTH, CR_HEIGHT);

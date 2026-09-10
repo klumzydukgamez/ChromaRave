@@ -187,6 +187,14 @@ bool CR_AppState_init(CR_AppState* state) {
 		CR_PANIC("CR_AppState_pack_surface failed.");
 		return false;
 	}
+	if (!CR_AppState_pack_surface(
+			state,
+			CR_load_surface(CR_asset_overlay_png, CR_asset_overlany_png_size),
+			&state->overlaySprite, true
+		)) {
+		CR_PANIC("CR_AppState_pack_surface failed.");
+		return false;
+	}
 
 	if (!CR_AppState_pack_surface(
 			state,
@@ -380,6 +388,14 @@ bool CR_AppState_init(CR_AppState* state) {
 		CR_PANIC("CR_AppState_pack_surface failed.");
 		return false;
 	}
+	if (!CR_AppState_pack_surface(
+			state,
+			CR_load_surface(CR_asset_player_jump_png, CR_asset_player_jump_png_size),
+			&state->playerSprites[CR_EPlayerAnim_JUMP], true
+		)) {
+		CR_PANIC("CR_AppState_pack_surface failed.");
+		return false;
+	}
 
 	SDL_memset(&state->tiles, 0, sizeof(state->tiles));
 	if (!CR_AppState_load_level(
@@ -392,9 +408,11 @@ bool CR_AppState_init(CR_AppState* state) {
 	}
 
 	state->godMode = false;
+	state->godModeBoost = false;
 
 	glm_vec2_zero(state->playerVelocity);
 	state->playerOnGround = false;
+	state->playerLastGroundTick = 0;
 	state->playerAnimation = CR_EPlayerAnim_IDLE;
 	state->playerLastAnimation = CR_EPlayerAnim_IDLE;
 	state->playerFrameIndex = 0;

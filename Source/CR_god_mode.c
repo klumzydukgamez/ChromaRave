@@ -1,29 +1,37 @@
 #include "CR_shared.h"
 
 void CR_AppState_update_player_god_mode(CR_AppState* state) {
-	float horizontalInput = (float)CR_AppState_keyboard_down(state, CR_PLAYER_RIGHT) -
-							(float)CR_AppState_keyboard_down(state, CR_PLAYER_LEFT);
-	float horizontalVel = horizontalInput * CR_GOD_MODE_SPEED;
-	float horizontalRate = CR_PLAYER_DECELERATION;
-	if (SDL_fabsf(horizontalInput) > 0.0f)
-		horizontalRate = CR_PLAYER_ACCELERATION;
-	float horizontalDiff = horizontalVel - state->playerVelocity[0];
-	if (SDL_fabsf(horizontalDiff) <= horizontalRate)
-		state->playerVelocity[0] = horizontalVel;
-	else
-		state->playerVelocity[0] += copysignf(horizontalRate, horizontalDiff);
+	float speed = CR_GOD_MODE_SPEED;
+	if (CR_AppState_keyboard_held(state, CR_GOD_MODE_BOOST, CR_KEYBOARD_KEY_HOLD_TIME)) {
+		state->godModeBoost = true;
+		speed *= CR_GOD_MODE_BOOST_SPEED;
+	} else
+		state->godModeBoost = false;
 
-	float verticalInput = (float)CR_AppState_keyboard_down(state, CR_GOD_MODE_DOWN) -
-						  (float)CR_AppState_keyboard_down(state, CR_GOD_MODE_UP);
-	float verticalVel = verticalInput * CR_GOD_MODE_SPEED;
-	float verticalRate = CR_PLAYER_DECELERATION;
-	if (SDL_fabsf(verticalInput) > 0.0f)
-		verticalRate = CR_PLAYER_ACCELERATION;
-	float verticalDiff = verticalVel - state->playerVelocity[1];
-	if (SDL_fabsf(verticalDiff) <= verticalRate)
-		state->playerVelocity[1] = verticalVel;
+	vec2 input = {
+		(float)CR_AppState_keyboard_down(state, CR_PLAYER_RIGHT) -
+			(float)CR_AppState_keyboard_down(state, CR_PLAYER_LEFT),
+		(float)CR_AppState_keyboard_down(state, CR_GOD_MODE_DOWN) -
+			(float)CR_AppState_keyboard_down(state, CR_GOD_MODE_UP)
+	};
+	glm_vec2_normalize(input);
+	vec2 vel;
+	glm_vec2_scale(input, speed, vel);
+	vec2 rate = {CR_PLAYER_DECELERATION, CR_PLAYER_DECELERATION};
+	if (SDL_fabsf(vel[0]) > 0.0f)
+		rate[0] = CR_PLAYER_ACCELERATION;
+	if (SDL_fabsf(vel[1]) > 0.0f)
+		rate[1] = CR_PLAYER_ACCELERATION;
+	vec2 diff;
+	glm_vec2_sub(vel, state->playerVelocity, diff);
+	if (SDL_fabsf(diff[0]) <= rate[0])
+		state->playerVelocity[0] = vel[0];
 	else
-		state->playerVelocity[1] += copysignf(verticalRate, verticalDiff);
+		state->playerVelocity[0] += copysignf(rate[0], diff[0]);
+	if (SDL_fabsf(diff[1]) <= rate[1])
+		state->playerVelocity[1] = vel[1];
+	else
+		state->playerVelocity[1] += copysignf(rate[1], diff[1]);
 
 	glm_vec2_add(state->playerPosition, state->playerVelocity, state->playerPosition);
 
@@ -43,8 +51,11 @@ void CR_AppState_draw_player_god_mode(CR_AppState* state) {
 	glm_vec2_zero(offset);
 	if (state->playerFlip)
 		glm_vec2_copy((float*)CR_PLAYER_FLIP_OFFSET, offset);
-	CR_AppState_push_sprite(
-		state, &state->playerSprites[CR_EPlayerAnim_GOD_MODE],
+	CR_EPlayerAnim anim = CR_EPlayerAnim_IDLE;
+	if (state->godModeBoost)
+		anim = CR_EPlayerAnim_GOD_MODE;
+	CR_AppState_push_animated_sprite(
+		state, &state->playerSprites[anim],
 		(vec3){
 			state->playerPosition[0] - offset[0],
 			state->playerPosition[1] - offset[1],
@@ -52,6 +63,7 @@ void CR_AppState_draw_player_god_mode(CR_AppState* state) {
 		},
 		(vec2){48.0f, 48.0f},
 		(vec4){0.0f, 0.0f, 0.0f, 0.0f},
-		state->playerFlip
+		state->playerFlip,
+		CR_PLAYER_ANIM_LENGTHS[anim], 0
 	);
 }

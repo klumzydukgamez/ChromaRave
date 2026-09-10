@@ -5,6 +5,7 @@ typedef enum : int {
 	CR_EPlayerAnim_GOD_MODE,
 	CR_EPlayerAnim_IDLE,
 	CR_EPlayerAnim_RUN,
+	CR_EPlayerAnim_JUMP,
 	CR_EPlayerAnim_COUNT
 } CR_EPlayerAnim;
 
