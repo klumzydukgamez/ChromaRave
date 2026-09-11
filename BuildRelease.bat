@@ -2,7 +2,7 @@
 
 cls
 
-cmake -S . -B Build -G Ninja -D CR_RELEASE=OFF
+cmake -S . -B Build -G Ninja -D CR_RELEASE=ON
 cmake --build Build
 cmake --install Build
 

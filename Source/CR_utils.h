@@ -3,14 +3,18 @@
 
 #include "CR_common.h"
 
+#if !defined CR_RELEASE
 #define CR_PANIC(format, ...) \
 	SDL_Log("[PANIC][%s][%d] " format, __FILE_NAME__, __LINE__, ##__VA_ARGS__)
-
 #define CR_WARN(format, ...) \
 	SDL_Log("[WARN][%s][%d] " format, __FILE_NAME__, __LINE__, ##__VA_ARGS__)
-
 #define CR_INFO(format, ...) \
 	SDL_Log("[INFO][%s][%d] " format, __FILE_NAME__, __LINE__, ##__VA_ARGS__)
+#else
+#define CR_PANIC
+#define CR_WARN
+#define CR_INFO
+#endif
 
 #define CR_TILE_ASSET_HEADER(tile)                        \
 	extern const Uint8* const CR_asset_tile_##tile##_png; \

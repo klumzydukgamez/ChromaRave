@@ -71,6 +71,7 @@ void CR_AppState_update_player(CR_AppState* state) {
 	state->playerVelocity[1] += CR_PLAYER_GRAVITY;
 	if (state->playerVelocity[1] >= CR_PLAYER_TERMINAL_VEL)
 		state->playerVelocity[1] = CR_PLAYER_TERMINAL_VEL;
+
 	state->playerPosition[1] += state->playerVelocity[1];
 
 	min[0] = (int)(state->playerPosition[0] / CR_TILE_WIDTH);
@@ -120,25 +121,64 @@ void CR_AppState_update_player(CR_AppState* state) {
 	glm_vec2_sub(cameraTarget, (vec2){-24.0f, -24.0f}, cameraTarget);
 	glm_vec2_copy(cameraTarget, state->cameraTargetPosition);
 
-	if (SDL_fabsf(state->playerVelocity[0]) > 0.1f || (CR_AppState_keyboard_down(state, CR_PLAYER_LEFT) || CR_AppState_keyboard_down(state, CR_PLAYER_RIGHT)))
-		state->playerAnimation = CR_EPlayerAnim_RUN;
-	else
-		state->playerAnimation = CR_EPlayerAnim_IDLE;
+	if (state->playerOnGround) {
+		if (state->playerAnimation == CR_EPlayerAnim_JUMP && state->playerFrameIndex < 3) {
+			state->playerFrameIndex = 3;
+			state->playerLastFrameTick = ticks;
+		} else if (state->playerAnimation == CR_EPlayerAnim_JUMP && state->playerFrameIndex == 3) {
+			Uint64 elapsed = ticks - state->playerLastFrameTick;
+			if (elapsed >= CR_PLAYER_ANIM_TIMES[CR_EPlayerAnim_JUMP]) {
+				if (SDL_fabsf(state->playerVelocity[0]) > 0.1f ||
+					(CR_AppState_keyboard_down(state, CR_PLAYER_LEFT) || CR_AppState_keyboard_down(state, CR_PLAYER_RIGHT)))
+					state->playerAnimation = CR_EPlayerAnim_RUN;
+				else
+					state->playerAnimation = CR_EPlayerAnim_IDLE;
+			}
+		} else {
+			if (SDL_fabsf(state->playerVelocity[0]) > 0.1f ||
+				(CR_AppState_keyboard_down(state, CR_PLAYER_LEFT) || CR_AppState_keyboard_down(state, CR_PLAYER_RIGHT)))
+				state->playerAnimation = CR_EPlayerAnim_RUN;
+			else
+				state->playerAnimation = CR_EPlayerAnim_IDLE;
+		}
+	} else
+		state->playerAnimation = CR_EPlayerAnim_JUMP;
 
 	if (state->playerLastAnimation != state->playerAnimation) {
-		state->playerFrameIndex = 0;
+		if (state->playerAnimation != CR_EPlayerAnim_JUMP || state->playerOnGround)
+			state->playerFrameIndex = 0;
 		state->playerLastFrameTick = ticks;
 		state->playerPlaying = true;
 		state->playerLastAnimation = state->playerAnimation;
 	}
 	Uint64 elapsed = ticks - state->playerLastFrameTick;
 	if (state->playerPlaying) {
-		while (elapsed >= CR_PLAYER_ANIM_TIMES[state->playerAnimation]) {
-			elapsed -= CR_PLAYER_ANIM_TIMES[state->playerAnimation];
-			state->playerLastFrameTick += CR_PLAYER_ANIM_TIMES[state->playerAnimation];
-			state->playerFrameIndex++;
-			if (state->playerFrameIndex >= CR_PLAYER_ANIM_LENGTHS[state->playerAnimation]) {
+		if (state->playerAnimation == CR_EPlayerAnim_JUMP) {
+			if (state->playerVelocity[1] < 0.0f) {
 				state->playerFrameIndex = 0;
+				state->playerLastFrameTick = ticks;
+			} else if (state->playerVelocity[1] >= 0.0f && state->playerFrameIndex < 3) {
+				if (state->playerFrameIndex < 1) {
+					state->playerFrameIndex = 1;
+					state->playerLastFrameTick = ticks;
+				} else {
+					while (elapsed >= CR_PLAYER_ANIM_TIMES[CR_EPlayerAnim_JUMP]) {
+						elapsed -= CR_PLAYER_ANIM_TIMES[CR_EPlayerAnim_JUMP];
+						state->playerLastFrameTick += CR_PLAYER_ANIM_TIMES[CR_EPlayerAnim_JUMP];
+						if (state->playerFrameIndex == 1) {
+							state->playerFrameIndex = 2;
+						}
+					}
+				}
+			}
+		} else {
+			while (elapsed >= CR_PLAYER_ANIM_TIMES[state->playerAnimation]) {
+				elapsed -= CR_PLAYER_ANIM_TIMES[state->playerAnimation];
+				state->playerLastFrameTick += CR_PLAYER_ANIM_TIMES[state->playerAnimation];
+				state->playerFrameIndex++;
+				if (state->playerFrameIndex >= CR_PLAYER_ANIM_LENGTHS[state->playerAnimation]) {
+					state->playerFrameIndex = 0;
+				}
 			}
 		}
 	}

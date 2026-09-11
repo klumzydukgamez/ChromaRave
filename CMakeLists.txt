@@ -16,6 +16,8 @@ set(CR_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source")
 set(CR_ASSETS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Assets")
 set(CR_VENDOR_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Vendor")
 
+option(CR_RELEASE "" OFF)
+
 set(SDL_SHARED OFF CACHE BOOL "" FORCE)
 set(SDL_STATIC ON  CACHE BOOL "" FORCE)
 add_subdirectory(
@@ -57,12 +59,27 @@ target_compile_options(
 	ChromaRave PRIVATE
 	"--embed-dir=${CR_ASSETS_DIR}"
 )
+target_link_options(
+	ChromaRave PRIVATE
+	"-static"
+	"-static-libgcc"
+)
 target_link_libraries(
 	ChromaRave PRIVATE
 	SDL3::SDL3
 	glad
 	cglm
 )
+if (CR_RELEASE)
+	set_target_properties(
+		ChromaRave PROPERTIES
+		WIN32_EXECUTABLE TRUE
+	)
+	target_compile_definitions(
+		ChromaRave PRIVATE
+		"CR_RELEASE"
+	)
+endif()
 install(
 	FILES
 		$<TARGET_FILE:ChromaRave>
