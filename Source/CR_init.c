@@ -366,6 +366,23 @@ bool CR_AppState_init(CR_AppState* state) {
 
 	if (!CR_AppState_pack_surface(
 			state,
+			CR_load_surface(CR_asset_enemy_baton_warden_idle_png, CR_asset_enemy_baton_warden_idle_png_size),
+			&state->enemySprites[CR_EEnemyType_BATON_WARDEN][CR_EEnemyAnim_IDLE], true
+		)) {
+		CR_PANIC("CR_AppState_pack_surface failed.");
+		return false;
+	}
+	if (!CR_AppState_pack_surface(
+			state,
+			CR_load_surface(CR_asset_enemy_baton_warden_walk_png, CR_asset_enemy_baton_warden_walk_png_size),
+			&state->enemySprites[CR_EEnemyType_BATON_WARDEN][CR_EEnemyAnim_WALK], true
+		)) {
+		CR_PANIC("CR_AppState_pack_surface failed.");
+		return false;
+	}
+
+	if (!CR_AppState_pack_surface(
+			state,
 			CR_load_surface(CR_asset_player_god_mode_png, CR_asset_player_god_mode_png_size),
 			&state->playerSprites[CR_EPlayerAnim_GOD_MODE], true
 		)) {
@@ -398,6 +415,9 @@ bool CR_AppState_init(CR_AppState* state) {
 	}
 
 	SDL_memset(&state->tiles, 0, sizeof(state->tiles));
+
+	SDL_memset(state->enemies, 0, sizeof(state->enemies));
+
 	if (!CR_AppState_load_level(
 			state,
 			CR_load_surface(CR_asset_level_png, CR_asset_level_png_size),

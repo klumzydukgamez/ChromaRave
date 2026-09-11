@@ -35,21 +35,40 @@ bool CR_AppState_load_level(CR_AppState* state, SDL_Surface* surface, bool clean
 			if (r > CR_TILE_MAX)
 				r = 0;
 			state->tiles[y][x] = (int)r;
-			switch (g) {
-				case CR_LEVEL_GREEN_PLAYER:
-					glm_vec2_copy(
-						(vec2){
-							CR_TILE_WIDTH * x, CR_TILE_HEIGHT * y
-						},
-						state->playerPosition
-					);
-					glm_vec2_copy(
-						state->playerPosition,
-						state->cameraPosition
-					);
-					break;
-				default:
-					break;
+
+			int i = (int)b;
+			if (g == CR_LEVEL_PLAYER) {
+				glm_vec2_copy(
+					(vec2){
+						CR_TILE_WIDTH * x, CR_TILE_HEIGHT * y
+					},
+					state->playerPosition
+				);
+				glm_vec2_copy(
+					state->playerPosition,
+					state->cameraPosition
+				);
+			} else if (g >= CR_LEVEL_ENEMY_POINT_MIN && g <= CR_LEVEL_ENEMY_POINT_MAX) {
+				int index = g - CR_LEVEL_ENEMY_POINT_MIN;
+				glm_vec2_copy(
+					(vec2){CR_TILE_WIDTH * x, CR_TILE_HEIGHT * y},
+					state->enemies[i].points[index]
+				);
+				if (index + 1 > state->enemies[i].pointCount)
+					state->enemies[i].pointCount = index + 1;
+			} else if (g > CR_LEVEL_ENEMY_POINT_MAX) {
+				state->enemies[i].type = (CR_EEnemyType)(g - CR_LEVEL_ENEMY_POINT_MAX - 1);
+				glm_vec2_copy(
+					(vec2){CR_TILE_WIDTH * x, CR_TILE_HEIGHT * y},
+					state->enemies[i].position
+				);
+				state->enemies[i].alive = true;
+				state->enemies[i].animation = CR_EEnemyAnim_IDLE;
+				state->enemies[i].lastAnimation = CR_EEnemyAnim_IDLE;
+				state->enemies[i].frameIndex = 0;
+				state->enemies[i].lastFrameTick = SDL_GetTicks();
+				state->enemies[i].playing = true;
+				state->enemies[i].flip = false;
 			}
 		}
 	}

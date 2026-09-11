@@ -64,9 +64,27 @@ typedef struct {
 	SDL_FRect overlaySprite;
 	SDL_FRect backgroundSprites[CR_BACKGROUND_LAYER_COUNT];
 	SDL_FRect tileSprites[CR_TILE_MAX];
+	SDL_FRect enemySprites[CR_EEnemyType_COUNT][CR_EEnemyAnim_COUNT];
 	SDL_FRect playerSprites[CR_EPlayerAnim_COUNT];
 
 	int tiles[CR_TILE_ROWS][CR_TILE_COLS];
+
+	struct {
+		vec2 position;
+		vec2 velocity;
+		vec2 points[CR_MAX_ENEMY_POINTS];
+		int pointCount;
+		int currentPoint;
+		int direction;
+		bool alive;
+		CR_EEnemyType type;
+		CR_EEnemyAnim animation;
+		CR_EEnemyAnim lastAnimation;
+		int frameIndex;
+		Uint64 lastFrameTick;
+		bool playing;
+		bool flip;
+	} enemies[CR_MAX_ENEMIES];
 
 	bool godMode;
 	bool godModeBoost;
@@ -109,6 +127,9 @@ bool CR_AppState_pack_surface(CR_AppState* state, SDL_Surface* surface, SDL_FRec
 void CR_AppState_draw_background(CR_AppState* state);
 
 void CR_AppState_draw_tiles(CR_AppState* state);
+
+void CR_AppState_update_enemies(CR_AppState* state);
+void CR_AppState_draw_enemies(CR_AppState* state);
 
 bool CR_AppState_load_level(CR_AppState* state, SDL_Surface* surface, bool cleanup);
 

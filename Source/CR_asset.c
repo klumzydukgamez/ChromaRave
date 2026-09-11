@@ -699,6 +699,17 @@ static const Uint8 asset_tile_126_png[] = {
 const Uint8* const CR_asset_tile_126_png = asset_tile_126_png;
 const size_t CR_asset_tile_126_png_size = sizeof(asset_tile_126_png);
 
+static const Uint8 asset_enemy_baton_warden_idle_png[] = {
+#embed "CR_enemy_baton_warden_idle.png"
+};
+const Uint8* const CR_asset_enemy_baton_warden_idle_png = asset_enemy_baton_warden_idle_png;
+const size_t CR_asset_enemy_baton_warden_idle_png_size = sizeof(asset_enemy_baton_warden_idle_png);
+static const Uint8 asset_enemy_baton_warden_walk_png[] = {
+#embed "CR_enemy_baton_warden_walk.png"
+};
+const Uint8* const CR_asset_enemy_baton_warden_walk_png = asset_enemy_baton_warden_walk_png;
+const size_t CR_asset_enemy_baton_warden_walk_png_size = sizeof(asset_enemy_baton_warden_walk_png);
+
 static const Uint8 asset_player_god_mode_png[] = {
 #embed "CR_player_god_mode.png"
 };

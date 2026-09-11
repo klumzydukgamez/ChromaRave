@@ -63,9 +63,43 @@ constexpr int CR_TILE_MAX = 126 + 1;
 constexpr int CR_TILE_WIDTH = 32;
 constexpr int CR_TILE_HEIGHT = 32;
 
-constexpr int CR_LEVEL_GREEN_PLAYER = 1;
+constexpr int CR_MAX_ENEMIES = 96;
+constexpr int CR_ENEMY_WIDTH = 48;
+constexpr int CR_ENEMY_HEIGHT = 48;
+constexpr int CR_MAX_ENEMY_POINTS = 10;
+constexpr float CR_ENEMY_ACCELERATIONS[CR_EEnemyType_COUNT] = {
+	[CR_EEnemyType_BATON_WARDEN] = 50.0f
+};
+constexpr float CR_ENEMY_DECELERATIONS[CR_EEnemyType_COUNT] = {
+	[CR_EEnemyType_BATON_WARDEN] = 40.0f
+};
+constexpr float CR_ENEMY_SPEEDS[CR_EEnemyType_COUNT] = {
+	[CR_EEnemyType_BATON_WARDEN] = 2.0f
+};
+constexpr int CR_ENEMY_ANIM_LENGTHS[CR_EEnemyType_COUNT][CR_EEnemyAnim_COUNT] = {
+	[CR_EEnemyType_BATON_WARDEN][CR_EEnemyAnim_IDLE] = 4,
+	[CR_EEnemyType_BATON_WARDEN][CR_EEnemyAnim_WALK] = 6
+};
+constexpr int CR_ENEMY_ANIM_TIMES[CR_EEnemyType_COUNT][CR_EEnemyAnim_COUNT] = {
+	[CR_EEnemyType_BATON_WARDEN][CR_EEnemyAnim_IDLE] = 100,
+	[CR_EEnemyType_BATON_WARDEN][CR_EEnemyAnim_WALK] = 100
+};
+constexpr SDL_FRect CR_ENEMY_COLLISIONS[CR_EEnemyType_COUNT] = {
+	[CR_EEnemyType_BATON_WARDEN] = {6.0f, 18.0f, 16.0f, 30.0f}
+};
+constexpr vec2 CR_ENEMY_FLIP_OFFSETS[CR_EEnemyType_COUNT] = {
+	[CR_EEnemyType_BATON_WARDEN] = {20.0f, 0.0}
+};
 
+constexpr int CR_LEVEL_PLAYER = 1;
+constexpr int CR_LEVEL_ENEMY_POINT_MIN = 2;
+constexpr int CR_LEVEL_ENEMY_POINT_MAX = CR_LEVEL_ENEMY_POINT_MIN + CR_MAX_ENEMY_POINTS - 1;
+
+#if !defined CR_RELEASE
 constexpr bool CR_ALLOW_GOD_MODE = true;
+#else
+constexpr bool CR_ALLOW_GOD_MODE = false;
+#endif
 constexpr SDL_Scancode CR_GOD_MODE = SDL_SCANCODE_G;
 constexpr SDL_Scancode CR_GOD_MODE_UP = SDL_SCANCODE_W;
 constexpr SDL_Scancode CR_GOD_MODE_DOWN = SDL_SCANCODE_S;
@@ -78,6 +112,18 @@ constexpr SDL_Scancode CR_PLAYER_RIGHT = SDL_SCANCODE_D;
 constexpr SDL_Scancode CR_PLAYER_JUMP = SDL_SCANCODE_SPACE;
 constexpr int CR_PLAYER_WIDTH = 48;
 constexpr int CR_PLAYER_HEIGHT = 48;
+constexpr int CR_PLAYER_ANIM_LENGTHS[CR_EPlayerAnim_COUNT] = {
+	[CR_EPlayerAnim_GOD_MODE] = 0,
+	[CR_EPlayerAnim_IDLE] = 4,
+	[CR_EPlayerAnim_RUN] = 6,
+	[CR_EPlayerAnim_JUMP] = 4
+};
+constexpr int CR_PLAYER_ANIM_TIMES[CR_EPlayerAnim_COUNT] = {
+	[CR_EPlayerAnim_GOD_MODE] = 0,
+	[CR_EPlayerAnim_IDLE] = 100,
+	[CR_EPlayerAnim_RUN] = 100,
+	[CR_EPlayerAnim_JUMP] = 100
+};
 constexpr SDL_FRect CR_PLAYER_COLLISION = {6.0f, 18.0f, 16.0f, 30.0f};
 constexpr float CR_PLAYER_MOVE_SPEED = 5.0f;
 constexpr float CR_PLAYER_JUMP_SPEED = -12.0f;

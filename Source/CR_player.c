@@ -15,7 +15,7 @@ void CR_AppState_update_player(CR_AppState* state) {
 	if (SDL_fabsf(horizontalDiff) <= horizontalRate)
 		state->playerVelocity[0] = horizontalVel;
 	else
-		state->playerVelocity[0] += copysignf(horizontalRate, horizontalDiff);
+		state->playerVelocity[0] += SDL_copysignf(horizontalRate, horizontalDiff);
 
 	state->playerPosition[0] += state->playerVelocity[0];
 
@@ -53,6 +53,28 @@ void CR_AppState_update_player(CR_AppState* state) {
 					state->playerPosition[0] = tileMax[0];
 				state->playerVelocity[0] = 0.0f;
 			}
+		}
+	}
+
+	for (int i = 0; i < CR_MAX_ENEMIES; i++) {
+		if (!state->enemies[i].alive)
+			continue;
+		SDL_FRect box = CR_ENEMY_COLLISIONS[state->enemies[i].type];
+		vec2 eMin = {
+			state->enemies[i].position[0],
+			state->enemies[i].position[1]
+		};
+		vec2 eMax = {
+			state->enemies[i].position[0] + box.w,
+			state->enemies[i].position[1] + box.h
+		};
+		if ((state->playerPosition[0] < eMax[0] && (state->playerPosition[0] + CR_PLAYER_COLLISION.w) > eMin[0]) &&
+			(state->playerPosition[1] < eMax[1] && (state->playerPosition[1] + CR_PLAYER_COLLISION.h) > eMin[1])) {
+			if (state->playerVelocity[0] > 0.0f)
+				state->playerPosition[0] = eMin[0] - CR_PLAYER_COLLISION.w;
+			else if (state->playerVelocity[0] < 0.0f)
+				state->playerPosition[0] = eMax[0];
+			state->playerVelocity[0] = 0.0f;
 		}
 	}
 
@@ -110,6 +132,30 @@ void CR_AppState_update_player(CR_AppState* state) {
 					state->playerPosition[1] = tileMax[1];
 				state->playerVelocity[1] = 0.0f;
 			}
+		}
+	}
+
+	for (int i = 0; i < CR_MAX_ENEMIES; i++) {
+		if (!state->enemies[i].alive)
+			continue;
+		SDL_FRect box = CR_ENEMY_COLLISIONS[state->enemies[i].type];
+		vec2 eMin = {
+			state->enemies[i].position[0],
+			state->enemies[i].position[1]
+		};
+		vec2 eMax = {
+			state->enemies[i].position[0] + box.w,
+			state->enemies[i].position[1] + box.h
+		};
+		if ((state->playerPosition[0] < eMax[0] && (state->playerPosition[0] + CR_PLAYER_COLLISION.w) > eMin[0]) &&
+			(state->playerPosition[1] < eMax[1] && (state->playerPosition[1] + CR_PLAYER_COLLISION.h) > eMin[1])) {
+			if (state->playerVelocity[1] > 0.0f) {
+				state->playerPosition[1] = eMin[1] - CR_PLAYER_COLLISION.h;
+				state->playerOnGround = true;
+				state->playerPosition[0] += state->enemies[i].velocity[0];
+			} else if (state->playerVelocity[1] < 0.0f)
+				state->playerPosition[1] = eMax[1];
+			state->playerVelocity[1] = 0.0f;
 		}
 	}
 
@@ -176,9 +222,8 @@ void CR_AppState_update_player(CR_AppState* state) {
 				elapsed -= CR_PLAYER_ANIM_TIMES[state->playerAnimation];
 				state->playerLastFrameTick += CR_PLAYER_ANIM_TIMES[state->playerAnimation];
 				state->playerFrameIndex++;
-				if (state->playerFrameIndex >= CR_PLAYER_ANIM_LENGTHS[state->playerAnimation]) {
+				if (state->playerFrameIndex >= CR_PLAYER_ANIM_LENGTHS[state->playerAnimation])
 					state->playerFrameIndex = 0;
-				}
 			}
 		}
 	}
@@ -206,20 +251,4 @@ void CR_AppState_draw_player(CR_AppState* state) {
 		state->playerFlip,
 		CR_PLAYER_ANIM_LENGTHS[state->playerAnimation], state->playerFrameIndex
 	);
-	/*
-	CR_AppState_push_sprite(
-		state, &state->overlaySprite,
-		(vec3){state->playerPosition[0], state->playerPosition[1], 0.0f},
-		(vec2){CR_PLAYER_COLLISION.w, CR_PLAYER_COLLISION.h},
-		(vec4){0.0f, 0.4f, 0.8f, 1.0f},
-		false
-	);
-	CR_AppState_push_sprite(
-		state, &state->blankSprite,
-		(vec3){state->playerPosition[0], state->playerPosition[1], 0.0f},
-		(vec2){1.0f, 1.0f},
-		(vec4){1.0f, 0.0f, 0.0f, 1.0f},
-		false
-	);
-	*/
 }

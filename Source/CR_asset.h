@@ -160,6 +160,11 @@ CR_TILE_ASSET_HEADER(124);
 CR_TILE_ASSET_HEADER(125);
 CR_TILE_ASSET_HEADER(126);
 
+extern const Uint8* const CR_asset_enemy_baton_warden_idle_png;
+extern const size_t CR_asset_enemy_baton_warden_idle_png_size;
+extern const Uint8* const CR_asset_enemy_baton_warden_walk_png;
+extern const size_t CR_asset_enemy_baton_warden_walk_png_size;
+
 extern const Uint8* const CR_asset_player_god_mode_png;
 extern const size_t CR_asset_player_god_mode_png_size;
 extern const Uint8* const CR_asset_player_idle_png;

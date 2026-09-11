@@ -15,10 +15,12 @@ bool CR_AppState_iterate(CR_AppState* state) {
 		CR_AppState_update_player_god_mode(state);
 	else
 		CR_AppState_update_player(state);
+	CR_AppState_update_enemies(state);
 	CR_AppState_update_camera(state);
 
 	CR_AppState_draw_background(state);
 	CR_AppState_draw_tiles(state);
+	CR_AppState_draw_enemies(state);
 	if (state->godMode)
 		CR_AppState_draw_player_god_mode(state);
 	else
