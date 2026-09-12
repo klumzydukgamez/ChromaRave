@@ -83,6 +83,9 @@ typedef struct {
 		int pointCount;
 		int currentPoint;
 		int direction;
+		bool waiting;
+		int waitDuration;
+		int waitStartTick;
 		bool alive;
 		CR_EEnemyType type;
 		CR_EEnemyAnim animation;
@@ -91,6 +94,8 @@ typedef struct {
 		Uint64 lastFrameTick;
 		bool playing;
 		bool flip;
+		bool attacking;
+		bool appliedDamage;
 	} enemies[CR_MAX_ENEMIES];
 
 	bool godMode;
@@ -108,6 +113,10 @@ typedef struct {
 	bool playerPlaying;
 	bool playerFlip;
 	float playerEnemyThreat;
+	float playerHealth;
+	float playerLastHealth;
+	bool playerHurting;
+	bool playerAlive;
 } CR_AppState;
 
 void CR_AppState_update_input(CR_AppState* state);

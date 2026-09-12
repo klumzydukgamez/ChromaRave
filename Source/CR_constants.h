@@ -28,7 +28,7 @@ constexpr int CR_MAX_INDICES = CR_MAX_SPRITES * 6;
 constexpr float CR_CAMERA_NEAR = -100.0f;
 constexpr float CR_CAMERA_FAR = 100.0f;
 constexpr float CR_CAMERA_MOVE_SPEED = 0.15f;
-constexpr float CR_CAMERA_ZOOM_SPEED = 0.04f;
+constexpr float CR_CAMERA_ZOOM_SPEED = 0.06f;
 constexpr int CR_MAX_CAMERA_SHAKES = 16;
 constexpr float CR_MIN_CAMERA_SHAKE_INTENSITY = 0.05f;
 constexpr float CR_MIN_CAMERA_SHAKE_DIRECTION = 0.01f;
@@ -82,19 +82,43 @@ constexpr float CR_ENEMY_DECELERATIONS[CR_EEnemyType_COUNT] = {
 constexpr float CR_ENEMY_SPEEDS[CR_EEnemyType_COUNT] = {
 	[CR_EEnemyType_BATON_WARDEN] = 2.0f
 };
+constexpr int CR_MIN_ENEMY_WAIT_TIMES[CR_EEnemyType_COUNT] = {
+	[CR_EEnemyType_BATON_WARDEN] = 1000
+};
+constexpr int CR_MAX_ENEMY_WAIT_TIMES[CR_EEnemyType_COUNT] = {
+	[CR_EEnemyType_BATON_WARDEN] = 3000
+};
 constexpr int CR_ENEMY_ANIM_LENGTHS[CR_EEnemyType_COUNT][CR_EEnemyAnim_COUNT] = {
 	[CR_EEnemyType_BATON_WARDEN][CR_EEnemyAnim_IDLE] = 4,
-	[CR_EEnemyType_BATON_WARDEN][CR_EEnemyAnim_WALK] = 6
+	[CR_EEnemyType_BATON_WARDEN][CR_EEnemyAnim_WALK] = 6,
+	[CR_EEnemyType_BATON_WARDEN][CR_EEnemyAnim_ATTACK] = 6
 };
 constexpr int CR_ENEMY_ANIM_TIMES[CR_EEnemyType_COUNT][CR_EEnemyAnim_COUNT] = {
 	[CR_EEnemyType_BATON_WARDEN][CR_EEnemyAnim_IDLE] = 100,
-	[CR_EEnemyType_BATON_WARDEN][CR_EEnemyAnim_WALK] = 100
+	[CR_EEnemyType_BATON_WARDEN][CR_EEnemyAnim_WALK] = 100,
+	[CR_EEnemyType_BATON_WARDEN][CR_EEnemyAnim_ATTACK] = 80
 };
 constexpr SDL_FRect CR_ENEMY_COLLISIONS[CR_EEnemyType_COUNT] = {
 	[CR_EEnemyType_BATON_WARDEN] = {6.0f, 18.0f, 16.0f, 30.0f}
 };
 constexpr vec2 CR_ENEMY_FLIP_OFFSETS[CR_EEnemyType_COUNT] = {
 	[CR_EEnemyType_BATON_WARDEN] = {20.0f, 0.0}
+};
+constexpr float CR_ENEMY_GRAVITIES[CR_EEnemyType_COUNT] = {
+	[CR_EEnemyType_BATON_WARDEN] = 0.6f
+};
+constexpr float CR_ENEMY_TERMINAL_VEL = 30.0f;
+constexpr vec2 CR_ENEMY_ATTACK_RANGES[CR_EEnemyType_COUNT] = {
+	[CR_EEnemyType_BATON_WARDEN] = {8.0f, 0.0f}
+};
+constexpr float CR_ENEMY_ATTACK_TOLERANCES[CR_EEnemyAnim_COUNT] = {
+	[CR_EEnemyType_BATON_WARDEN] = 0.1f
+};
+constexpr float CR_MIN_ENEMY_DAMAGES[CR_EEnemyType_COUNT] = {
+	[CR_EEnemyType_BATON_WARDEN] = 2.0f
+};
+constexpr float CR_MAX_ENEMY_DAMAGES[CR_EEnemyType_COUNT] = {
+	[CR_EEnemyType_BATON_WARDEN] = 20.0f
 };
 
 constexpr int CR_LEVEL_PLAYER = 1;
@@ -122,13 +146,17 @@ constexpr int CR_PLAYER_ANIM_LENGTHS[CR_EPlayerAnim_COUNT] = {
 	[CR_EPlayerAnim_GOD_MODE] = 0,
 	[CR_EPlayerAnim_IDLE] = 4,
 	[CR_EPlayerAnim_RUN] = 6,
-	[CR_EPlayerAnim_JUMP] = 4
+	[CR_EPlayerAnim_JUMP] = 4,
+	[CR_EPlayerAnim_HURT] = 2,
+	[CR_EPlayerAnim_DEATH] = 6
 };
 constexpr int CR_PLAYER_ANIM_TIMES[CR_EPlayerAnim_COUNT] = {
 	[CR_EPlayerAnim_GOD_MODE] = 0,
 	[CR_EPlayerAnim_IDLE] = 100,
 	[CR_EPlayerAnim_RUN] = 100,
-	[CR_EPlayerAnim_JUMP] = 100
+	[CR_EPlayerAnim_JUMP] = 100,
+	[CR_EPlayerAnim_HURT] = 100,
+	[CR_EPlayerAnim_DEATH] = 100
 };
 constexpr SDL_FRect CR_PLAYER_COLLISION = {6.0f, 18.0f, 16.0f, 30.0f};
 constexpr float CR_PLAYER_MOVE_SPEED = 5.0f;
@@ -141,5 +169,7 @@ constexpr float CR_PLAYER_TERMINAL_VEL = 30.0f;
 constexpr float CR_PLAYER_ACCELERATION = 50.0f;
 constexpr float CR_PLAYER_DECELERATION = 40.0f;
 constexpr vec2 CR_PLAYER_FLIP_OFFSET = {20.0f, 0.0f};
+constexpr float CR_MAX_PLAYER_HEALTH = 100.0f;
+constexpr float CR_MIN_PLAYER_HEALTH = 0.0f;
 
 #endif /* __CR_CONSTANTS_H__ */

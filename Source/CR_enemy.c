@@ -8,29 +8,63 @@ void CR_AppState_update_enemies(CR_AppState* state) {
 			continue;
 		CR_EEnemyType type = state->enemies[i].type;
 		SDL_FRect box = CR_ENEMY_COLLISIONS[type];
-		vec2 target;
-		glm_vec2_copy(state->enemies[i].points[state->enemies[i].currentPoint], target);
-		target[1] += (float)CR_TILE_HEIGHT - box.h;
-		vec2 diff;
-		glm_vec2_sub(target, state->enemies[i].position, diff);
-		float dist = glm_vec2_norm(diff);
-		if (dist <= 1.0f) {
-			glm_vec2_copy(target, state->enemies[i].position);
-			if (state->enemies[i].currentPoint >= state->enemies[i].pointCount - 1) {
-				state->enemies[i].currentPoint = state->enemies[i].pointCount - 1;
-				state->enemies[i].direction = -1;
-			} else if (state->enemies[i].currentPoint <= 0) {
-				state->enemies[i].currentPoint = 0;
-				state->enemies[i].direction = 1;
+
+		if (!state->godMode && !state->enemies[i].attacking) {
+			vec2 range;
+			glm_vec2_copy((float*)CR_ENEMY_ATTACK_RANGES[type], range);
+			bool x = (state->enemies[i].position[0] - range[0] < (state->playerPosition[0] + CR_PLAYER_COLLISION.w) && (state->enemies[i].position[0] + box.w + range[0]) > state->playerPosition[0]);
+			bool y = (state->enemies[i].position[1] - range[1] < (state->playerPosition[1] + CR_PLAYER_COLLISION.h) && (state->enemies[i].position[1] + box.h + range[1]) > state->playerPosition[1]);
+			if (x && y) {
+				vec2 diff;
+				glm_vec2_sub(state->enemies[i].position, state->playerPosition, diff);
+				glm_vec2_normalize(diff);
+				if (SDL_fabsf(state->enemies[i].direction - diff[0]) <= CR_ENEMY_ATTACK_TOLERANCES[type]) {
+					if (state->playerAlive) {
+						state->enemies[i].attacking = true;
+						state->enemies[i].animation = CR_EEnemyAnim_ATTACK;
+						state->enemies[i].appliedDamage = false;
+						state->cameraTargetZoom = 2.0;
+					}
+				}
 			}
-			state->enemies[i].currentPoint += state->enemies[i].direction;
-			glm_vec2_copy(state->enemies[i].points[state->enemies[i].currentPoint], target);
-			glm_vec2_sub(target, state->enemies[i].position, diff);
-			dist = glm_vec2_norm(diff);
 		}
+
+		vec2 target;
+		vec2 diff;
+		float dist;
 		vec2 input = {0.0f, 0.0f};
-		if (dist > 0.0f)
-			glm_vec2_normalize_to(diff, input);
+		if (!state->enemies[i].attacking) {
+			if (state->enemies[i].waiting) {
+				if (state->ticks - state->enemies[i].waitStartTick >= state->enemies[i].waitDuration) {
+					if (state->enemies[i].currentPoint >= state->enemies[i].pointCount - 1) {
+						state->enemies[i].currentPoint = state->enemies[i].pointCount - 1;
+						state->enemies[i].direction = -1;
+					} else if (state->enemies[i].currentPoint <= 0) {
+						state->enemies[i].currentPoint = 0;
+						state->enemies[i].direction = 1;
+					}
+					state->enemies[i].currentPoint += state->enemies[i].direction;
+					state->enemies[i].waiting = false;
+				} else
+					state->enemies[i].animation = CR_EEnemyAnim_IDLE;
+			}
+
+			if (!state->enemies[i].waiting) {
+				glm_vec2_copy(state->enemies[i].points[state->enemies[i].currentPoint], target);
+				target[1] += (float)CR_TILE_HEIGHT - box.h;
+
+				glm_vec2_sub(target, state->enemies[i].position, diff);
+				dist = glm_vec2_norm(diff);
+				if (dist <= 1.0f) {
+					glm_vec2_copy(target, state->enemies[i].position);
+					state->enemies[i].waiting = true;
+					state->enemies[i].waitStartTick = state->ticks;
+					state->enemies[i].waitDuration = (int)(CR_MIN_ENEMY_WAIT_TIMES[type] + (SDL_randf() * (CR_MAX_ENEMY_WAIT_TIMES[type] - CR_MIN_ENEMY_WAIT_TIMES[type])));
+				}
+				if (dist > 0.0f)
+					glm_vec2_normalize_to(diff, input);
+			}
+		}
 		vec2 vel;
 		glm_vec2_scale(input, CR_ENEMY_SPEEDS[type], vel);
 		vec2 rate = {CR_ENEMY_DECELERATIONS[type], CR_ENEMY_DECELERATIONS[type]};
@@ -91,7 +125,7 @@ void CR_AppState_update_enemies(CR_AppState* state) {
 			}
 		}
 
-		if (!state->godMode) {
+		if (!state->godMode && state->playerAlive) {
 			if ((state->enemies[i].position[0] < (state->playerPosition[0] + CR_PLAYER_COLLISION.w) && (state->enemies[i].position[0] + box.w) > state->playerPosition[0]) &&
 				(state->enemies[i].position[1] < (state->playerPosition[1] + CR_PLAYER_COLLISION.h) && (state->enemies[i].position[1] + box.h) > state->playerPosition[1])) {
 				if (state->enemies[i].velocity[0] > 0.0f)
@@ -102,6 +136,9 @@ void CR_AppState_update_enemies(CR_AppState* state) {
 			}
 		}
 
+		state->enemies[i].velocity[1] += CR_ENEMY_GRAVITIES[type];
+		if (state->enemies[i].velocity[1] >= CR_ENEMY_TERMINAL_VEL)
+			state->enemies[i].velocity[1] = CR_ENEMY_TERMINAL_VEL;
 		state->enemies[i].position[1] += state->enemies[i].velocity[1];
 
 		min[0] = (int)(state->enemies[i].position[0] / CR_TILE_WIDTH);
@@ -141,7 +178,7 @@ void CR_AppState_update_enemies(CR_AppState* state) {
 			}
 		}
 
-		if (!state->godMode) {
+		if (!state->godMode && state->playerAlive) {
 			if ((state->enemies[i].position[0] < (state->playerPosition[0] + CR_PLAYER_COLLISION.w) && (state->enemies[i].position[0] + box.w) > state->playerPosition[0]) &&
 				(state->enemies[i].position[1] < (state->playerPosition[1] + CR_PLAYER_COLLISION.h) && (state->enemies[i].position[1] + box.h) > state->playerPosition[1])) {
 				if (state->enemies[i].velocity[1] > 0.0f)
@@ -152,11 +189,13 @@ void CR_AppState_update_enemies(CR_AppState* state) {
 			}
 		}
 
-		if (SDL_fabsf(state->enemies[i].velocity[0]) > 0.1f ||
-			SDL_fabsf(input[0]) > 0.1f)
-			state->enemies[i].animation = CR_EEnemyAnim_WALK;
-		else
-			state->enemies[i].animation = CR_EEnemyAnim_IDLE;
+		if (!state->enemies[i].attacking) {
+			if (SDL_fabsf(state->enemies[i].velocity[0]) > 0.1f ||
+				SDL_fabsf(input[0]) > 0.1f)
+				state->enemies[i].animation = CR_EEnemyAnim_WALK;
+			else
+				state->enemies[i].animation = CR_EEnemyAnim_IDLE;
+		}
 
 		if (state->enemies[i].lastAnimation != state->enemies[i].animation) {
 			state->enemies[i].frameIndex = 0;
@@ -172,8 +211,50 @@ void CR_AppState_update_enemies(CR_AppState* state) {
 				elapsed -= CR_ENEMY_ANIM_TIMES[type][animation];
 				state->enemies[i].lastFrameTick += CR_ENEMY_ANIM_TIMES[type][animation];
 				state->enemies[i].frameIndex++;
-				if (state->enemies[i].frameIndex >= CR_ENEMY_ANIM_LENGTHS[type][animation])
+				if (state->enemies[i].frameIndex >= CR_ENEMY_ANIM_LENGTHS[type][animation]) {
 					state->enemies[i].frameIndex = 0;
+					if (state->enemies[i].attacking) {
+						state->enemies[i].attacking = false;
+						state->enemies[i].animation = CR_EEnemyAnim_IDLE;
+						break;
+					}
+				}
+				if (state->enemies[i].frameIndex == 3 || state->enemies[i].frameIndex == 2) {
+					if (!state->godMode && state->enemies[i].attacking && !state->enemies[i].appliedDamage) {
+						vec2 range;
+						glm_vec2_copy((float*)CR_ENEMY_ATTACK_RANGES[type], range);
+						bool x = (state->enemies[i].position[0] - range[0] < (state->playerPosition[0] + CR_PLAYER_COLLISION.w) && (state->enemies[i].position[0] + box.w + range[0]) > state->playerPosition[0]);
+						bool y = (state->enemies[i].position[1] - range[1] < (state->playerPosition[1] + CR_PLAYER_COLLISION.h) && (state->enemies[i].position[1] + box.h + range[1]) > state->playerPosition[1]);
+						if (x && y) {
+							vec2 diff;
+							glm_vec2_sub(state->enemies[i].position, state->playerPosition, diff);
+							float dist = glm_vec2_norm(diff);
+							glm_vec2_normalize(diff);
+							if (SDL_fabsf(state->enemies[i].direction - diff[0]) <= CR_ENEMY_ATTACK_TOLERANCES[type]) {
+								float delta = 0.0f;
+								if (state->playerPosition[0] > state->enemies[i].position[0] + box.w) {
+									delta = state->playerPosition[0] - (state->enemies[i].position[0] + box.w);
+								} else if (state->enemies[i].position[0] > state->playerPosition[0] + CR_PLAYER_COLLISION.w) {
+									delta = state->enemies[i].position[0] - (state->playerPosition[0] + CR_PLAYER_COLLISION.w);
+								} else {
+									delta = 0.0f;
+								}
+								float max = range[0];
+								if (max <= 0.0f)
+									max = 1.0f;
+								float proximity = 1.0f - (delta / max);
+								if (proximity < 0.0f)
+									proximity = 0.0f;
+								if (proximity > 1.0f)
+									proximity = 1.0f;
+								state->playerHealth -= CR_MIN_ENEMY_DAMAGES[type] + (CR_MAX_ENEMY_DAMAGES[type] - CR_MIN_ENEMY_DAMAGES[type]) * proximity;
+							}
+						}
+						state->enemies[i].appliedDamage = true;
+						state->cameraTargetZoom = 1.0f;
+						state->targetTimeScale = 1.0f;
+					}
+				}
 			}
 		}
 	}

@@ -9,6 +9,7 @@ typedef enum : int {
 typedef enum : int {
 	CR_EEnemyAnim_IDLE,
 	CR_EEnemyAnim_WALK,
+	CR_EEnemyAnim_ATTACK,
 	CR_EEnemyAnim_COUNT
 } CR_EEnemyAnim;
 
@@ -17,6 +18,8 @@ typedef enum : int {
 	CR_EPlayerAnim_IDLE,
 	CR_EPlayerAnim_RUN,
 	CR_EPlayerAnim_JUMP,
+	CR_EPlayerAnim_HURT,
+	CR_EPlayerAnim_DEATH,
 	CR_EPlayerAnim_COUNT
 } CR_EPlayerAnim;
 

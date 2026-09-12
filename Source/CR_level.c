@@ -62,6 +62,9 @@ bool CR_AppState_load_level(CR_AppState* state, SDL_Surface* surface, bool clean
 					(vec2){CR_TILE_WIDTH * x, CR_TILE_HEIGHT * y},
 					state->enemies[i].position
 				);
+				state->enemies[i].waiting = false;
+				state->enemies[i].waitDuration = 0;
+				state->enemies[i].waitStartTick = 0;
 				state->enemies[i].alive = true;
 				state->enemies[i].animation = CR_EEnemyAnim_IDLE;
 				state->enemies[i].lastAnimation = CR_EEnemyAnim_IDLE;
@@ -69,6 +72,8 @@ bool CR_AppState_load_level(CR_AppState* state, SDL_Surface* surface, bool clean
 				state->enemies[i].lastFrameTick = state->ticks;
 				state->enemies[i].playing = true;
 				state->enemies[i].flip = false;
+				state->enemies[i].attacking = false;
+				state->enemies[i].appliedDamage = false;
 			}
 		}
 	}

@@ -164,6 +164,8 @@ extern const Uint8* const CR_asset_enemy_baton_warden_idle_png;
 extern const size_t CR_asset_enemy_baton_warden_idle_png_size;
 extern const Uint8* const CR_asset_enemy_baton_warden_walk_png;
 extern const size_t CR_asset_enemy_baton_warden_walk_png_size;
+extern const Uint8* const CR_asset_enemy_baton_warden_attack_png;
+extern const size_t CR_asset_enemy_baton_warden_attack_png_size;
 
 extern const Uint8* const CR_asset_player_god_mode_png;
 extern const size_t CR_asset_player_god_mode_png_size;
@@ -173,5 +175,9 @@ extern const Uint8* const CR_asset_player_run_png;
 extern const size_t CR_asset_player_run_png_size;
 extern const Uint8* const CR_asset_player_jump_png;
 extern const size_t CR_asset_player_jump_png_size;
+extern const Uint8* const CR_asset_player_hurt_png;
+extern const size_t CR_asset_player_hurt_png_size;
+extern const Uint8* const CR_asset_player_death_png;
+extern const size_t CR_asset_player_death_png_size;
 
 #endif /* __CR_ASSET_H__ */

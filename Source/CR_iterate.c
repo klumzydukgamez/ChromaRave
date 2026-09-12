@@ -29,6 +29,9 @@ bool CR_AppState_iterate(CR_AppState* state) {
 	while (state->accumulator >= CR_FRAME_TIME) {
 		if (CR_AppState_keyboard_pressed(state, CR_GOD_MODE) && CR_ALLOW_GOD_MODE) {
 			state->godMode = !state->godMode;
+			if (state->godMode) {
+				state->playerHealth = CR_MAX_PLAYER_HEALTH;
+			}
 			CR_INFO("God Mode. %d.", state->godMode);
 		}
 
@@ -45,11 +48,19 @@ bool CR_AppState_iterate(CR_AppState* state) {
 
 	CR_AppState_draw_background(state);
 	CR_AppState_draw_tiles(state);
-	CR_AppState_draw_enemies(state);
-	if (state->godMode)
-		CR_AppState_draw_player_god_mode(state);
-	else
-		CR_AppState_draw_player(state);
+	if (state->playerAlive) {
+		CR_AppState_draw_enemies(state);
+		if (state->godMode)
+			CR_AppState_draw_player_god_mode(state);
+		else
+			CR_AppState_draw_player(state);
+	} else {
+		if (state->godMode)
+			CR_AppState_draw_player_god_mode(state);
+		else
+			CR_AppState_draw_player(state);
+		CR_AppState_draw_enemies(state);
+	}
 
 	CR_AppState_flush_vertices(state, false);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

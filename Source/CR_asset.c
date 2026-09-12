@@ -709,6 +709,11 @@ static const Uint8 asset_enemy_baton_warden_walk_png[] = {
 };
 const Uint8* const CR_asset_enemy_baton_warden_walk_png = asset_enemy_baton_warden_walk_png;
 const size_t CR_asset_enemy_baton_warden_walk_png_size = sizeof(asset_enemy_baton_warden_walk_png);
+static const Uint8 asset_enemy_baton_warden_attack_png[] = {
+#embed "CR_enemy_baton_warden_attack.png"
+};
+const Uint8* const CR_asset_enemy_baton_warden_attack_png = asset_enemy_baton_warden_attack_png;
+const size_t CR_asset_enemy_baton_warden_attack_png_size = sizeof(asset_enemy_baton_warden_attack_png);
 
 static const Uint8 asset_player_god_mode_png[] = {
 #embed "CR_player_god_mode.png"
@@ -730,3 +735,13 @@ static const Uint8 asset_player_jump_png[] = {
 };
 const Uint8* const CR_asset_player_jump_png = asset_player_jump_png;
 const size_t CR_asset_player_jump_png_size = sizeof(asset_player_jump_png);
+static const Uint8 asset_player_hurt_png[] = {
+#embed "CR_player_hurt.png"
+};
+const Uint8* const CR_asset_player_hurt_png = asset_player_hurt_png;
+const size_t CR_asset_player_hurt_png_size = sizeof(asset_player_hurt_png);
+static const Uint8 asset_player_death_png[] = {
+#embed "CR_player_death.png"
+};
+const Uint8* const CR_asset_player_death_png = asset_player_death_png;
+const size_t CR_asset_player_death_png_size = sizeof(asset_player_death_png);

@@ -387,6 +387,14 @@ bool CR_AppState_init(CR_AppState* state) {
 		CR_PANIC("CR_AppState_pack_surface failed.");
 		return false;
 	}
+	if (!CR_AppState_pack_surface(
+			state,
+			CR_load_surface(CR_asset_enemy_baton_warden_attack_png, CR_asset_enemy_baton_warden_attack_png_size),
+			&state->enemySprites[CR_EEnemyType_BATON_WARDEN][CR_EEnemyAnim_ATTACK], true
+		)) {
+		CR_PANIC("CR_AppState_pack_surface failed.");
+		return false;
+	}
 
 	if (!CR_AppState_pack_surface(
 			state,
@@ -420,6 +428,22 @@ bool CR_AppState_init(CR_AppState* state) {
 		CR_PANIC("CR_AppState_pack_surface failed.");
 		return false;
 	}
+	if (!CR_AppState_pack_surface(
+			state,
+			CR_load_surface(CR_asset_player_hurt_png, CR_asset_player_hurt_png_size),
+			&state->playerSprites[CR_EPlayerAnim_HURT], true
+		)) {
+		CR_PANIC("CR_AppState_pack_surface failed.");
+		return false;
+	}
+	if (!CR_AppState_pack_surface(
+			state,
+			CR_load_surface(CR_asset_player_death_png, CR_asset_player_death_png_size),
+			&state->playerSprites[CR_EPlayerAnim_DEATH], true
+		)) {
+		CR_PANIC("CR_AppState_pack_surface failed.");
+		return false;
+	}
 
 	SDL_memset(&state->tiles, 0, sizeof(state->tiles));
 
@@ -447,6 +471,10 @@ bool CR_AppState_init(CR_AppState* state) {
 	state->playerPlaying = true;
 	state->playerFlip = false;
 	state->playerEnemyThreat = 0.0;
+	state->playerHealth = CR_MAX_PLAYER_HEALTH;
+	state->playerLastHealth = state->playerHealth;
+	state->playerHurting = false;
+	state->playerAlive = true;
 
 	return true;
 }
