@@ -169,6 +169,7 @@ constexpr float CR_PLAYER_TERMINAL_VEL = 30.0f;
 constexpr float CR_PLAYER_ACCELERATION = 50.0f;
 constexpr float CR_PLAYER_DECELERATION = 40.0f;
 constexpr vec2 CR_PLAYER_FLIP_OFFSET = {20.0f, 0.0f};
+constexpr vec2 CR_PLAYER_CENTER_OFFSET = {8.0f, 15.0f};
 constexpr float CR_MAX_PLAYER_HEALTH = 100.0f;
 constexpr float CR_MIN_PLAYER_HEALTH = 0.0f;
 

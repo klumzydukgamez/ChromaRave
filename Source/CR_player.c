@@ -4,6 +4,29 @@ void CR_AppState_update_player(CR_AppState* state) {
 	ivec2 min;
 	ivec2 max;
 
+	if (state->playerHealth <= CR_MIN_PLAYER_HEALTH) {
+		state->playerHealth = CR_MIN_PLAYER_HEALTH;
+		state->playerAlive = false;
+		state->playerLastJumpTick = 0;
+		state->playerAnimation = CR_EPlayerAnim_DEATH;
+	} else {
+		state->playerAlive = true;
+	}
+	float healthDiff = state->playerLastHealth - state->playerHealth;
+	if (healthDiff > 0.0f) {
+		float desperation = 1.0f - (state->playerHealth / CR_MAX_PLAYER_HEALTH);
+		CR_AppState_shake_camera(
+			state, state->playerPosition, state->playerVelocity, 1000.0f,
+			20.0f * ((healthDiff / CR_MAX_PLAYER_HEALTH) + (desperation * desperation * desperation)),
+			0.9f
+		);
+		if (state->playerAlive) {
+			state->playerHurting = true;
+			state->playerAnimation = CR_EPlayerAnim_HURT;
+		}
+	}
+	state->playerLastHealth = state->playerHealth;
+
 	if (state->playerAlive) {
 		float horizontalInput = (float)CR_AppState_keyboard_down(state, CR_PLAYER_RIGHT) -
 								(float)CR_AppState_keyboard_down(state, CR_PLAYER_LEFT);
@@ -166,33 +189,10 @@ void CR_AppState_update_player(CR_AppState* state) {
 	if (state->playerOnGround)
 		state->playerLastGroundTick = state->ticks;
 
-	if (state->playerHealth <= CR_MIN_PLAYER_HEALTH) {
-		state->playerHealth = CR_MIN_PLAYER_HEALTH;
-		state->playerAlive = false;
-		state->playerLastJumpTick = 0;
-		state->playerAnimation = CR_EPlayerAnim_DEATH;
-	} else {
-		state->playerAlive = true;
-	}
-	float healthDiff = state->playerLastHealth - state->playerHealth;
-	if (healthDiff > 0.0f) {
-		float desperation = 1.0f - (state->playerHealth / CR_MAX_PLAYER_HEALTH);
-		CR_AppState_shake_camera(
-			state, state->playerPosition, state->playerVelocity, 1000.0f,
-			20.0f * ((healthDiff / CR_MAX_PLAYER_HEALTH) + (desperation * desperation * desperation)),
-			0.9f
-		);
-		if (state->playerAlive) {
-			state->playerHurting = true;
-			state->playerAnimation = CR_EPlayerAnim_HURT;
-		}
-	}
-	state->playerLastHealth = state->playerHealth;
-
 	if (state->playerAlive) {
 		vec2 cameraTarget;
 		glm_vec2_copy(state->playerPosition, cameraTarget);
-		glm_vec2_sub(cameraTarget, (vec2){-24.0f, -24.0f}, cameraTarget);
+		glm_vec2_add(cameraTarget, (float*)CR_PLAYER_CENTER_OFFSET, cameraTarget);
 		glm_vec2_copy(cameraTarget, state->cameraTargetPosition);
 	}
 
