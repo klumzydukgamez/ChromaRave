@@ -14,6 +14,7 @@ typedef struct {
 	double accumulator;
 	double timeScale;
 	double targetTimeScale;
+	double time;
 	Uint64 ticks;
 
 	bool keyboardKeys[CR_MAX_KEYBOARD_KEYS];

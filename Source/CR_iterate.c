@@ -15,13 +15,15 @@ bool CR_AppState_iterate(CR_AppState* state) {
 			state->timeScale = state->targetTimeScale;
 	}
 
-	Uint64 ticks = SDL_GetTicks();
-	double elapsed = (double)(ticks - state->lastTime) / 1000.0;
-	state->lastTime = ticks;
+	Uint64 counter = SDL_GetPerformanceCounter();
+	Uint64 frequency = SDL_GetPerformanceFrequency();
+	double elapsed = (double)(counter - state->lastTime) / (double)frequency;
+	state->lastTime = counter;
 	if (elapsed > CR_MAX_ELAPSED)
 		elapsed = CR_MAX_ELAPSED;
 	elapsed *= state->timeScale;
-	state->ticks += (Uint64)(elapsed * 1000.0);
+	state->time += elapsed * 1000.0;
+	state->ticks = (Uint64)(state->time);
 	state->accumulator += elapsed;
 
 	while (state->accumulator >= CR_FRAME_TIME) {

@@ -231,19 +231,20 @@ void CR_AppState_update_player(CR_AppState* state) {
 					state->playerFrameIndex = 1;
 					state->playerLastFrameTick = state->ticks;
 				} else {
-					if (elapsed >= CR_PLAYER_ANIM_TIMES[CR_EPlayerAnim_JUMP]) {
+					while (elapsed >= CR_PLAYER_ANIM_TIMES[CR_EPlayerAnim_JUMP]) {
 						elapsed -= CR_PLAYER_ANIM_TIMES[CR_EPlayerAnim_JUMP];
-						state->playerLastFrameTick += state->ticks;
+						state->playerLastFrameTick += CR_PLAYER_ANIM_TIMES[state->playerAnimation];
 						if (state->playerFrameIndex == 1) {
 							state->playerFrameIndex = 2;
+							break;
 						}
 					}
 				}
 			}
 		} else {
-			if (elapsed >= CR_PLAYER_ANIM_TIMES[state->playerAnimation]) {
+			while (elapsed >= CR_PLAYER_ANIM_TIMES[state->playerAnimation]) {
 				elapsed -= CR_PLAYER_ANIM_TIMES[state->playerAnimation];
-				state->playerLastFrameTick = state->ticks;
+				state->playerLastFrameTick += CR_PLAYER_ANIM_TIMES[state->playerAnimation];
 				state->playerFrameIndex++;
 				if (state->playerFrameIndex >= CR_PLAYER_ANIM_LENGTHS[state->playerAnimation])
 					state->playerFrameIndex = 0;

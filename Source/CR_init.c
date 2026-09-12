@@ -59,6 +59,7 @@ bool CR_AppState_init(CR_AppState* state) {
 	state->accumulator = 0.0;
 	state->timeScale = 1.0;
 	state->targetTimeScale = 1.0;
+	state->time = 0.0;
 	state->ticks = 0;
 
 	SDL_memset(&state->keyboardKeys, 0, sizeof(state->keyboardKeys));

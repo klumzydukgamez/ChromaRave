@@ -170,7 +170,7 @@ void CR_AppState_update_enemies(CR_AppState* state) {
 		if (state->enemies[i].playing) {
 			while (elapsed >= CR_ENEMY_ANIM_TIMES[type][animation]) {
 				elapsed -= CR_ENEMY_ANIM_TIMES[type][animation];
-				state->enemies[i].lastFrameTick = state->ticks;
+				state->enemies[i].lastFrameTick += CR_ENEMY_ANIM_TIMES[type][animation];
 				state->enemies[i].frameIndex++;
 				if (state->enemies[i].frameIndex >= CR_ENEMY_ANIM_LENGTHS[type][animation])
 					state->enemies[i].frameIndex = 0;
