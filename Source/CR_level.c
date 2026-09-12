@@ -66,7 +66,7 @@ bool CR_AppState_load_level(CR_AppState* state, SDL_Surface* surface, bool clean
 				state->enemies[i].animation = CR_EEnemyAnim_IDLE;
 				state->enemies[i].lastAnimation = CR_EEnemyAnim_IDLE;
 				state->enemies[i].frameIndex = 0;
-				state->enemies[i].lastFrameTick = SDL_GetTicks();
+				state->enemies[i].lastFrameTick = state->ticks;
 				state->enemies[i].playing = true;
 				state->enemies[i].flip = false;
 			}

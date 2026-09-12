@@ -6,7 +6,6 @@ void CR_AppState_update_enemies(CR_AppState* state) {
 			continue;
 		if (state->enemies[i].pointCount <= 1)
 			continue;
-		Uint64 ticks = SDL_GetTicks();
 		CR_EEnemyType type = state->enemies[i].type;
 		SDL_FRect box = CR_ENEMY_COLLISIONS[type];
 		vec2 target;
@@ -161,17 +160,17 @@ void CR_AppState_update_enemies(CR_AppState* state) {
 
 		if (state->enemies[i].lastAnimation != state->enemies[i].animation) {
 			state->enemies[i].frameIndex = 0;
-			state->enemies[i].lastFrameTick = ticks;
+			state->enemies[i].lastFrameTick = state->ticks;
 			state->enemies[i].playing = true;
 			state->enemies[i].lastAnimation = state->enemies[i].animation;
 		}
 
 		CR_EEnemyAnim animation = state->enemies[i].animation;
-		Uint64 elapsed = ticks - state->enemies[i].lastFrameTick;
+		Uint64 elapsed = state->ticks - state->enemies[i].lastFrameTick;
 		if (state->enemies[i].playing) {
 			while (elapsed >= CR_ENEMY_ANIM_TIMES[type][animation]) {
 				elapsed -= CR_ENEMY_ANIM_TIMES[type][animation];
-				state->enemies[i].lastFrameTick += CR_ENEMY_ANIM_TIMES[type][animation];
+				state->enemies[i].lastFrameTick = state->ticks;
 				state->enemies[i].frameIndex++;
 				if (state->enemies[i].frameIndex >= CR_ENEMY_ANIM_LENGTHS[type][animation])
 					state->enemies[i].frameIndex = 0;

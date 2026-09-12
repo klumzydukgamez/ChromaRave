@@ -3,7 +3,6 @@
 void CR_AppState_update_player(CR_AppState* state) {
 	ivec2 min;
 	ivec2 max;
-	Uint64 ticks = SDL_GetTicks();
 
 	float horizontalInput = (float)CR_AppState_keyboard_down(state, CR_PLAYER_RIGHT) -
 							(float)CR_AppState_keyboard_down(state, CR_PLAYER_LEFT);
@@ -79,9 +78,9 @@ void CR_AppState_update_player(CR_AppState* state) {
 	}
 
 	if (CR_AppState_keyboard_pressed(state, CR_PLAYER_JUMP))
-		state->playerLastJumpTick = ticks;
-	if (ticks - state->playerLastJumpTick <= CR_PLAYER_JUMP_TIME &&
-		(state->playerOnGround || ticks - state->playerLastGroundTick <= CR_PLAYER_COYOTE_TIME)) {
+		state->playerLastJumpTick = state->ticks;
+	if (state->ticks - state->playerLastJumpTick <= CR_PLAYER_JUMP_TIME &&
+		(state->playerOnGround || state->ticks - state->playerLastGroundTick <= CR_PLAYER_COYOTE_TIME)) {
 		state->playerVelocity[1] = CR_PLAYER_JUMP_SPEED;
 		state->playerOnGround = false;
 		state->playerLastGroundTick = 0;
@@ -135,6 +134,8 @@ void CR_AppState_update_player(CR_AppState* state) {
 		}
 	}
 
+	int closeEnemies = 0;
+	float enemyThreat = 0.0f;
 	for (int i = 0; i < CR_MAX_ENEMIES; i++) {
 		if (!state->enemies[i].alive)
 			continue;
@@ -157,22 +158,44 @@ void CR_AppState_update_player(CR_AppState* state) {
 				state->playerPosition[1] = eMax[1];
 			state->playerVelocity[1] = 0.0f;
 		}
+		vec2 diff;
+		glm_vec2_sub(state->enemies[i].position, state->playerPosition, diff);
+		float dist = glm_vec2_norm(diff);
+		if (dist < 300.0f) {
+			closeEnemies++;
+			enemyThreat += 1.0f - (dist / 300.0f);
+		}
+	}
+	if (closeEnemies == 0)
+		state->playerEnemyThreat = 0.0f;
+	else {
+		float crowd = (float)closeEnemies / (float)1;
+		if (crowd > 1.0f)
+			crowd = 1.0f;
+		state->playerEnemyThreat = (enemyThreat / (float)closeEnemies) * crowd;
+		if (state->playerEnemyThreat > 1.0f)
+			state->playerEnemyThreat = 1.0f;
+		if (state->playerEnemyThreat < 0.0f)
+			state->playerEnemyThreat = 0.0f;
 	}
 
 	if (state->playerOnGround)
-		state->playerLastGroundTick = ticks;
+		state->playerLastGroundTick = state->ticks;
 
 	vec2 cameraTarget;
 	glm_vec2_copy(state->playerPosition, cameraTarget);
 	glm_vec2_sub(cameraTarget, (vec2){-24.0f, -24.0f}, cameraTarget);
 	glm_vec2_copy(cameraTarget, state->cameraTargetPosition);
 
+	state->targetTimeScale = 1.0 - ((double)state->playerEnemyThreat * (1.0 - 0.5));
+	state->cameraTargetZoom = 1.0f + (state->playerEnemyThreat * (1.5 - 1.0));
+
 	if (state->playerOnGround) {
 		if (state->playerAnimation == CR_EPlayerAnim_JUMP && state->playerFrameIndex < 3) {
 			state->playerFrameIndex = 3;
-			state->playerLastFrameTick = ticks;
+			state->playerLastFrameTick = state->ticks;
 		} else if (state->playerAnimation == CR_EPlayerAnim_JUMP && state->playerFrameIndex == 3) {
-			Uint64 elapsed = ticks - state->playerLastFrameTick;
+			Uint64 elapsed = state->ticks - state->playerLastFrameTick;
 			if (elapsed >= CR_PLAYER_ANIM_TIMES[CR_EPlayerAnim_JUMP]) {
 				if (SDL_fabsf(state->playerVelocity[0]) > 0.1f ||
 					(CR_AppState_keyboard_down(state, CR_PLAYER_LEFT) || CR_AppState_keyboard_down(state, CR_PLAYER_RIGHT)))
@@ -193,24 +216,24 @@ void CR_AppState_update_player(CR_AppState* state) {
 	if (state->playerLastAnimation != state->playerAnimation) {
 		if (state->playerAnimation != CR_EPlayerAnim_JUMP || state->playerOnGround)
 			state->playerFrameIndex = 0;
-		state->playerLastFrameTick = ticks;
+		state->playerLastFrameTick = state->ticks;
 		state->playerPlaying = true;
 		state->playerLastAnimation = state->playerAnimation;
 	}
-	Uint64 elapsed = ticks - state->playerLastFrameTick;
+	Uint64 elapsed = state->ticks - state->playerLastFrameTick;
 	if (state->playerPlaying) {
 		if (state->playerAnimation == CR_EPlayerAnim_JUMP) {
 			if (state->playerVelocity[1] < 0.0f) {
 				state->playerFrameIndex = 0;
-				state->playerLastFrameTick = ticks;
+				state->playerLastFrameTick = state->ticks;
 			} else if (state->playerVelocity[1] >= 0.0f && state->playerFrameIndex < 3) {
 				if (state->playerFrameIndex < 1) {
 					state->playerFrameIndex = 1;
-					state->playerLastFrameTick = ticks;
+					state->playerLastFrameTick = state->ticks;
 				} else {
-					while (elapsed >= CR_PLAYER_ANIM_TIMES[CR_EPlayerAnim_JUMP]) {
+					if (elapsed >= CR_PLAYER_ANIM_TIMES[CR_EPlayerAnim_JUMP]) {
 						elapsed -= CR_PLAYER_ANIM_TIMES[CR_EPlayerAnim_JUMP];
-						state->playerLastFrameTick += CR_PLAYER_ANIM_TIMES[CR_EPlayerAnim_JUMP];
+						state->playerLastFrameTick += state->ticks;
 						if (state->playerFrameIndex == 1) {
 							state->playerFrameIndex = 2;
 						}
@@ -218,9 +241,9 @@ void CR_AppState_update_player(CR_AppState* state) {
 				}
 			}
 		} else {
-			while (elapsed >= CR_PLAYER_ANIM_TIMES[state->playerAnimation]) {
+			if (elapsed >= CR_PLAYER_ANIM_TIMES[state->playerAnimation]) {
 				elapsed -= CR_PLAYER_ANIM_TIMES[state->playerAnimation];
-				state->playerLastFrameTick += CR_PLAYER_ANIM_TIMES[state->playerAnimation];
+				state->playerLastFrameTick = state->ticks;
 				state->playerFrameIndex++;
 				if (state->playerFrameIndex >= CR_PLAYER_ANIM_LENGTHS[state->playerAnimation])
 					state->playerFrameIndex = 0;

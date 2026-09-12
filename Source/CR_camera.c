@@ -74,7 +74,7 @@ void CR_AppState_update_camera(CR_AppState* state) {
 			0.0f
 		}
 	);
-	glm_scale(view, (vec3){state->cameraZoom, state->cameraZoom, 1.0f});
+	// glm_scale(view, (vec3){state->cameraZoom, state->cameraZoom, 1.0f});
 	vec3 inverse = {
 		-state->cameraPosition[0] + shake[0],
 		-state->cameraPosition[1] + shake[1],

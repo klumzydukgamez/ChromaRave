@@ -44,16 +44,22 @@ bool CR_AppState_init(CR_AppState* state) {
 		return false;
 	}
 
-	if (!SDL_GL_SetSwapInterval(1)) {
+	/* if (!SDL_GL_SetSwapInterval(1)) {
 		CR_PANIC("SDL_GL_SetSwapInterval failed. %s", SDL_GetError());
 		return false;
-	}
+	} */
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	state->lastTime = SDL_GetPerformanceCounter();
+	state->accumulator = 0.0;
+	state->timeScale = 1.0;
+	state->targetTimeScale = 1.0;
+	state->ticks = 0;
 
 	SDL_memset(&state->keyboardKeys, 0, sizeof(state->keyboardKeys));
 	SDL_memset(&state->keyboardPreviousKeys, 0, sizeof(state->keyboardPreviousKeys));
@@ -436,9 +442,10 @@ bool CR_AppState_init(CR_AppState* state) {
 	state->playerAnimation = CR_EPlayerAnim_IDLE;
 	state->playerLastAnimation = CR_EPlayerAnim_IDLE;
 	state->playerFrameIndex = 0;
-	state->playerLastFrameTick = SDL_GetTicks();
+	state->playerLastFrameTick = state->ticks;
 	state->playerPlaying = true;
 	state->playerFlip = false;
+	state->playerEnemyThreat = 0.0;
 
 	return true;
 }

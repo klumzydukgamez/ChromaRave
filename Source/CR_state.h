@@ -10,6 +10,12 @@ typedef struct {
 
 	SDL_Rect viewport;
 
+	Uint64 lastTime;
+	double accumulator;
+	double timeScale;
+	double targetTimeScale;
+	Uint64 ticks;
+
 	bool keyboardKeys[CR_MAX_KEYBOARD_KEYS];
 	bool keyboardPreviousKeys[CR_MAX_KEYBOARD_KEYS];
 	Uint64 keyboardKeyTimestamps[CR_MAX_KEYBOARD_KEYS];
@@ -100,6 +106,7 @@ typedef struct {
 	Uint64 playerLastFrameTick;
 	bool playerPlaying;
 	bool playerFlip;
+	float playerEnemyThreat;
 } CR_AppState;
 
 void CR_AppState_update_input(CR_AppState* state);

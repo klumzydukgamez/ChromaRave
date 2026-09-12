@@ -10,6 +10,12 @@ constexpr float CR_HALF_WIDTH = (float)CR_WIDTH / 2.0f;
 constexpr float CR_HALF_HEIGHT = (float)CR_HEIGHT / 2.0f;
 constexpr float CR_ASPECT = (float)CR_WIDTH / (float)CR_HEIGHT;
 
+constexpr double CR_FPS = 60.0;
+constexpr double CR_FRAME_TIME = 1.0 / CR_FPS;
+constexpr double CR_MAX_ELAPSED = 0.25;
+constexpr double CR_TIME_SCALE_CHANGE_SPEED = 0.1;
+constexpr double CR_TIME_SCALE_TOLERANCE = 0.001;
+
 constexpr int CR_MAX_KEYBOARD_KEYS = SDL_SCANCODE_COUNT;
 constexpr Uint64 CR_KEYBOARD_KEY_HOLD_TIME = 150;
 constexpr int CR_MAX_MOUSE_BUTTONS = 9;

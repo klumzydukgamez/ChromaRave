@@ -1,22 +1,45 @@
 #include "CR_shared.h"
 
 bool CR_AppState_iterate(CR_AppState* state) {
-	if (CR_AppState_keyboard_pressed(state, CR_GOD_MODE) && CR_ALLOW_GOD_MODE) {
-		state->godMode = !state->godMode;
-		CR_INFO("God Mode. %d.", state->godMode);
-	}
-
 	glBindFramebuffer(GL_FRAMEBUFFER, state->finalFramebuffer);
 	glViewport(0, 0, CR_WIDTH, CR_HEIGHT);
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	if (state->godMode)
-		CR_AppState_update_player_god_mode(state);
-	else
-		CR_AppState_update_player(state);
-	CR_AppState_update_enemies(state);
-	CR_AppState_update_camera(state);
+	if (state->timeScale != state->targetTimeScale) {
+		state->timeScale = glm_lerp(
+			state->timeScale, state->targetTimeScale,
+			CR_TIME_SCALE_CHANGE_SPEED
+		);
+		if (SDL_fabs(state->timeScale - state->targetTimeScale) < CR_TIME_SCALE_TOLERANCE)
+			state->timeScale = state->targetTimeScale;
+	}
+
+	Uint64 performanceCounter = SDL_GetPerformanceCounter();
+	double elapsed = (double)(performanceCounter - state->lastTime) / (double)SDL_GetPerformanceFrequency();
+	state->lastTime = performanceCounter;
+	if (elapsed > CR_MAX_ELAPSED)
+		elapsed = CR_MAX_ELAPSED;
+	elapsed *= state->timeScale;
+	state->ticks += (Uint64)(elapsed * 1000.0);
+	state->accumulator += elapsed;
+
+	while (state->accumulator >= CR_FRAME_TIME) {
+		if (CR_AppState_keyboard_pressed(state, CR_GOD_MODE) && CR_ALLOW_GOD_MODE) {
+			state->godMode = !state->godMode;
+			CR_INFO("God Mode. %d.", state->godMode);
+		}
+
+		if (state->godMode)
+			CR_AppState_update_player_god_mode(state);
+		else
+			CR_AppState_update_player(state);
+		CR_AppState_update_enemies(state);
+		CR_AppState_update_camera(state);
+
+		state->accumulator -= CR_FRAME_TIME;
+		CR_AppState_update_input(state);
+	}
 
 	CR_AppState_draw_background(state);
 	CR_AppState_draw_tiles(state);
@@ -38,7 +61,12 @@ bool CR_AppState_iterate(CR_AppState* state) {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glViewport(state->viewport.x, state->viewport.y, state->viewport.w, state->viewport.h);
+	glViewport(
+		state->viewport.x + (state->viewport.w - (state->viewport.w * state->cameraZoom)) / 2,
+		state->viewport.y + (state->viewport.h - (state->viewport.h * state->cameraZoom)) / 2,
+		state->viewport.w * state->cameraZoom,
+		state->viewport.h * state->cameraZoom
+	);
 	glUseProgram(state->finalShader);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, state->finalTexture);
@@ -50,8 +78,5 @@ bool CR_AppState_iterate(CR_AppState* state) {
 		CR_PANIC("SDL_GL_SwapWindow failed. %s", SDL_GetError());
 		return false;
 	}
-
-	CR_AppState_update_input(state);
-
 	return true;
 }
